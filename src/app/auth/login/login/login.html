@@ -1,0 +1,47 @@
+<div style="display: flex; flex-direction: column; align-items: center; margin-top: 50px">
+  <h2 style="border-bottom: 4px solid var(--vueling-yellow)">Vueling Crew Access</h2>
+  <div
+    style="
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    "
+  >
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input
+        formControlName="email"
+        type="email"
+        placeholder="Email"
+        style="display: block; margin-bottom: 10px; padding: 8px"
+      />
+      @if (emailControl.touched && emailControl.hasError('required')) {
+        <small style="display: block; color: #b00020; margin-bottom: 10px">Introduce tu email</small>
+      }
+
+      <input
+        formControlName="password"
+        type="password"
+        placeholder="Password"
+        style="display: block; margin-bottom: 20px; padding: 8px"
+      />
+      @if (passwordControl.touched && passwordControl.hasError('required')) {
+        <small style="display: block; color: #b00020; margin-bottom: 12px"
+          > Introduce el password</small
+        >
+      }
+
+      <button class="btn-vueling" type="submit" [disabled]="loading()">
+        {{ loading() ? 'Entrando...' : 'Iniciar Sesión' }}
+      </button>
+    </form>
+
+    @if (error()) {
+      <p style="color: #b00020; margin-top: 12px">{{ error() }}</p>
+    }
+  </div>
+  <p class="mt-4 text-sm text-gray-600 text-center">
+    ¿No tienes cuenta?
+    <a routerLink="/register" class="text-blue-600 hover:underline">Regístrate</a>
+  </p>
+</div>

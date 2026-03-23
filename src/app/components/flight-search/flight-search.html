@@ -1,0 +1,30 @@
+<div class="search-container">
+  <h2>Find your next flight</h2>
+
+  <form [formGroup]="flightForm" (ngSubmit)="search()">
+    
+    <div class="form-group">
+      <label>Origin:</label>
+      <input type="text" formControlName="origin" placeholder="Ej: BCN">
+    </div>
+
+    <div class="form-group">
+      <label>Destination:</label>
+      <input type="text" formControlName="destination" placeholder="Ej: MAD">
+    </div>
+
+    <div class="form-group">
+      <label>Passengers:</label>
+      <input type="number" formControlName="passengers">
+    </div>
+
+
+  </form>
+ <!-- Debug: Mostrar el valor del formulario en tiempo real
+  <pre class="debug-box">
+    {{ flightForm.value | json }}
+  </pre> -->
+    <button type="submit" class="btn-vueling" [disabled]="flightForm.invalid">
+      Search Flights
+    </button>
+</div>

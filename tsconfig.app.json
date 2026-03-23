@@ -10,7 +10,7 @@
   },
   "include": [
     "src/**/*.ts"
-  ],
+, "src/app/components/flights/flights.component.ts"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

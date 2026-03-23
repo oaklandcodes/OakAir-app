@@ -1,0 +1,28 @@
+/* Colores corporativos */
+:root {
+  --vueling-yellow: #ffed00;
+  --vueling-grey: #333333;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  color: var(--vueling-grey);
+}
+
+/* Un estilo rápido para botones que usaremos luego */
+.btn-vueling {
+  background-color: var(--vueling-yellow);
+  color: black;
+  border: none;
+  padding: 12px 24px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.btn-vueling:hover {
+  transform: scale(1.05);
+}

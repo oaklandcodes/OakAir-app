@@ -1,0 +1,52 @@
+.search-container {
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 30px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  font-family: sans-serif;
+}
+
+.form-group {
+  margin-bottom: 15px; /* Esto les da aire entre sí */
+  display: flex;
+  flex-direction: column; /* La etiqueta arriba, el input abajo */
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #555;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn-vueling {
+  width: 100%;
+  padding: 12px;
+  background-color: #ffed00; /* Amarillo Vueling */
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-vueling:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: not-allowed;
+}
+
+.debug-box {
+  background: #333;
+  color: #00ff00; /* Estilo Matrix para ver los datos */
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 20px;
+  font-size: 12px;
+}

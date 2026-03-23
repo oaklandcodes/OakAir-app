@@ -1,0 +1,52 @@
+<div class="dashboard-container" style="padding: 20px; max-width: 800px; margin: auto">
+  <header
+    style="
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ffed00;
+      padding-bottom: 10px;
+    "
+  >
+    <h1>✈️ Crew Schedule</h1>
+    <button class="btn-vueling" (click)="logout()">Exit</button>
+  </header>
+
+  <div class="content" style="margin-top: 20px">
+    <h3>Welcome back, Captain!</h3>
+    <p>These are your flights for today:</p>
+
+    <div
+      class="flight-card"
+      style="
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+      "
+    >
+      <div>
+        <strong>VY1234</strong>
+        <p style="margin: 0; color: #666">BCN (Barcelona) ➔ ORY (Paris)</p>
+      </div>
+      <div style="text-align: right">
+        <span
+          style="
+            background: #e6fffa;
+            color: #2c7a7b;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+          "
+          >ON TIME</span
+        >
+        <p style="margin: 0; font-weight: bold">08:30h</p>
+      </div>
+    </div>
+  </div>
+  <button routerLink="/search">Go to Flight Search</button>
+</div>
