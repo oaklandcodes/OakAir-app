@@ -1,27 +1,41 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { RouterLink } from '@angular/router';
+import { FlightCardComponent } from '../flight-card/flight-card.component';
+import { Flight } from '../../model/flight.model';
+import { FlightService } from '../../services/flight.service';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [RouterLink], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
+  imports: [RouterLink, FlightCardComponent], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
   templateUrl: './flights.html',
+  
 })
-export class FlightsComponent {
+
+  export class FlightsComponent implements OnInit {
   // 1. Inyectamos los servicios necesarios
   private authService = inject(AuthService);
   private router = inject(Router);
+  private flightService = inject(FlightService);
 
-  // 2. Creamos una lista de vuelos de ejemplo (esto normalmente vendría de una API)
-  public flights = [
-    { id: 'VY1234', origin: 'BCN', destination: 'ORY', time: '08:30' },
-    { id: 'VY5678', origin: 'MAD', destination: 'BCN', time: '12:15' },
-    { id: 'VY9012', origin: 'BCN', destination: 'FCO', time: '18:45' }
-  ];
+  // 2. Signal para almacenar los vuelos
+  flights = signal<Flight[]>([]);
 
-  // 3. La función para salir
+    ngOnInit(): void {
+    // 3. Cargamos los vuelos al inicializar el componente
+    this.flightService.getflights().subscribe((flightsList) => {
+      this.flights.set(flightsList);
+    });
+  }
+
+  handleReserve(flight: Flight) {
+    console.log('Vuelo reservado:', flight);
+    alert(`Capitán, ha seleccionado el vuelo ${flight.id}`);
+  }
+
+
   logout() {
     this.authService.logout(); // Cambiamos isAuthenticated a false en el servicio
     this.router.navigate(['/login']); // Redirigimos al usuario al login

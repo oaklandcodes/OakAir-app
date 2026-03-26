@@ -9,7 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   selector: 'app-login',
   imports: [ReactiveFormsModule],
   templateUrl: './login.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   // Inyectamos el servicio de autenticación y el router
@@ -19,9 +19,8 @@ export class LoginComponent implements OnInit {
 
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
-  
 
-  form = this.fb.group({
+  form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
   });
@@ -51,12 +50,6 @@ export class LoginComponent implements OnInit {
     this.error.set(null);
 
     const { email, password } = this.form.getRawValue();
-    if (!email || !password) {
-      this.error.set('Email y password son obligatorios');
-      this.loading.set(false);
-      this.form.enable();
-      return;
-    }
 
     this.authService
       .login(email, password)
@@ -78,5 +71,3 @@ export class LoginComponent implements OnInit {
       });
   }
 }
-
-

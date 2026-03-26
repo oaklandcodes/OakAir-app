@@ -1,30 +1,55 @@
-<div class="search-container">
-  <h2>Find your next flight</h2>
-
-  <form [formGroup]="flightForm" (ngSubmit)="search()">
+<div class="min-h-screen bg-slate-50 p-6 md:p-12">
+  
+  <header class="max-w-6xl mx-auto flex justify-between items-center border-b-2 border-emerald-500 pb-4 mb-10">
+    <div class="flex items-center gap-3">
+      <div class="bg-emerald-600 p-2 rounded-lg shadow-lg shadow-emerald-200">
+        <span class="text-white font-black text-xl">OA</span>
+      </div>
+      <h1 class="text-2xl font-black text-slate-900 tracking-tighter">
+        Oak<span class="text-emerald-600">Air</span>
+      </h1>
+    </div>
     
-    <div class="form-group">
-      <label>Origin:</label>
-      <input type="text" formControlName="origin" placeholder="Ej: BCN">
-    </div>
-
-    <div class="form-group">
-      <label>Destination:</label>
-      <input type="text" formControlName="destination" placeholder="Ej: MAD">
-    </div>
-
-    <div class="form-group">
-      <label>Passengers:</label>
-      <input type="number" formControlName="passengers">
-    </div>
-
-
-  </form>
- <!-- Debug: Mostrar el valor del formulario en tiempo real
-  <pre class="debug-box">
-    {{ flightForm.value | json }}
-  </pre> -->
-    <button type="submit" class="btn-vueling" [disabled]="flightForm.invalid">
-      Search Flights
+    <button routerLink="/flights" 
+            class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition-colors flex items-center gap-2 group">
+      <span class="group-hover:-translate-x-1 transition-transform">←</span> Dashboard de Vuelo
     </button>
+  </header>
+
+  <main class="max-w-6xl mx-auto">
+    <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/50 overflow-hidden border border-slate-100">
+      <div class="p-8 md:p-16">
+        <h2 class="text-4xl font-black text-slate-900 mb-3">Busca tu ruta</h2>
+        <p class="text-slate-400 mb-10 text-lg">Panel de gestión de vuelos para la tripulación de <strong>OakAir</strong>.</p>
+
+        <form [formGroup]="flightForm" (ngSubmit)="searchAllFlights()" class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div class="space-y-2">
+            <label class="text-xs font-black text-emerald-700 uppercase tracking-widest ml-1">Origen</label>
+            <input formControlName="origin" type="text" placeholder="BCN"
+                   class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700">
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-xs font-black text-emerald-700 uppercase tracking-widest ml-1">Destino</label>
+            <input formControlName="destination" type="text" placeholder="MAD"
+                   class="w-full p-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700">
+          </div>
+
+          <div class="flex items-end">
+            <button type="submit" 
+                    [disabled]="flightForm.invalid"
+                    class="w-full bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 px-8 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 disabled:bg-slate-200 disabled:shadow-none uppercase tracking-tighter">
+              Ver Disponibilidad
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      @for (flight of searchAllFlights(); track flight.id) {
+        <app-flight-card [flight]="flight"></app-flight-card>
+      }
+    </div>
+  </main>
 </div>
