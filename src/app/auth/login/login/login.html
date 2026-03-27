@@ -1,47 +1,83 @@
-<div style="display: flex; flex-direction: column; align-items: center; margin-top: 50px">
-  <h2 style="border-bottom: 4px solid var(--vueling-yellow)">Vueling Crew Access</h2>
-  <div
-    style="
-      background: white;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    "
-  >
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-      <input
-        formControlName="email"
-        type="email"
-        placeholder="Email"
-        style="display: block; margin-bottom: 10px; padding: 8px"
-      />
-      @if (emailControl.touched && emailControl.hasError('required')) {
-        <small style="display: block; color: #b00020; margin-bottom: 10px">Introduce tu email</small>
+<div class="h-dvh bg-slate-50 flex flex-col justify-start items-center pt-6 md:pt-8 px-4 md:px-6 pb-4 font-sans overflow-hidden">
+  
+  <div class="mb-5 md:mb-7 flex flex-col items-center gap-3 md:gap-4">
+    <div class="bg-emerald-600 p-4 rounded-3xl shadow-2xl shadow-emerald-200/50 transform hover:scale-105 transition-transform duration-500">
+      <span class="text-white font-black text-3xl md:text-4xl tracking-tighter">OA</span>
+    </div>
+    <div class="text-center">
+      <h1 class="text-4xl font-black text-slate-900 tracking-tighter italic">
+        Oak<span class="text-emerald-600">Air</span>
+      </h1>
+      <p class="text-slate-400 font-bold tracking-[0.4em] uppercase text-[9px] mt-2">Boutique Travel Experience</p>
+    </div>
+  </div>
+
+  <div class="w-full max-w-md bg-white rounded-[3rem] shadow-2xl shadow-slate-200/60 border border-slate-100 p-8 md:p-10">
+    
+    <header class="mb-6 text-center">
+      <h2 class="text-2xl font-black text-slate-800 mb-2 font-serif">¡Hola de nuevo!</h2>
+      <p class="text-slate-400 text-sm leading-relaxed italic">Accede a tu cuenta para gestionar tus próximas aventuras.</p>
+    </header>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+      
+      <div class="space-y-2">
+        <label class="text-[10px] font-black text-emerald-700 uppercase tracking-widest ml-1">Tu Correo Electrónico</label>
+        <div class="relative group">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">✉️</span>
+          <input 
+            formControlName="email"
+            type="email" 
+            placeholder="ejemplo@correo.com"
+            class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300 placeholder:font-normal"
+          >
+        </div>
+        @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
+          <p class="text-red-400 text-[10px] font-bold italic ml-1">Por favor, introduce tu email</p>
+        }
+      </div>
+
+      <div class="space-y-2">
+        <label class="text-[10px] font-black text-emerald-700 uppercase tracking-widest ml-1">Tu Contraseña</label>
+        <div class="relative group">
+          <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">🔒</span>
+          <input 
+            formControlName="password"
+            type="password" 
+            placeholder="••••••••"
+            class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300"
+          >
+        </div>
+        @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
+          <p class="text-red-400 text-[10px] font-bold italic ml-1">La contraseña es necesaria</p>
+        }
+      </div>
+
+      @if (error()) {
+        <div class="bg-red-50 border border-red-100 p-4 rounded-xl animate-shake">
+          <p class="text-red-600 text-xs font-bold text-center">Hubo un pequeño error. Inténtalo de nuevo.</p>
+        </div>
       }
 
-      <input
-        formControlName="password"
-        type="password"
-        placeholder="Password"
-        style="display: block; margin-bottom: 20px; padding: 8px"
-      />
-      @if (passwordControl.touched && passwordControl.hasError('required')) {
-        <small style="display: block; color: #b00020; margin-bottom: 12px"
-          > Introduce el password</small
-        >
-      }
-
-      <button class="btn-vueling" type="submit" [disabled]="loading()">
-        {{ loading() ? 'Entrando...' : 'Iniciar Sesión' }}
+      <button 
+        type="submit" 
+        [disabled]="loading() || form.invalid"
+        class="w-full mt-4 bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none active:scale-95 uppercase tracking-[0.2em] text-[11px] flex justify-center items-center gap-3 group"
+      >
+        {{ loading() ? 'Preparando maletas...' : 'Comenzar mi viaje' }}
+        <span class="group-hover:translate-x-1 transition-transform">✨</span>
       </button>
     </form>
 
-    @if (error()) {
-      <p style="color: #b00020; margin-top: 12px">{{ error() }}</p>
-    }
+    <div class="mt-6 pt-4 border-t border-slate-50 text-center">
+      <p class="text-sm text-slate-400 font-medium">
+        ¿Aún no tienes pasaporte OakAir? 
+        <a routerLink="/register" class="text-emerald-600 font-black hover:underline ml-1">Únete ahora</a>
+      </p>
+    </div>
   </div>
-  <p class="mt-4 text-sm text-gray-600 text-center">
-    ¿No tienes cuenta?
-    <a routerLink="/register" class="text-blue-600 hover:underline">Regístrate</a>
+
+  <p class="mt-6 text-slate-300 text-[9px] font-black uppercase tracking-[0.4em]">
+    © 2026 OakAir - Luxury Boutique Flights
   </p>
 </div>

@@ -1,45 +1,76 @@
-<div class="min-h-screen bg-gray-50 p-6">
-  <header class="flex justify-between items-center border-b-2 border-yellow-400 pb-4 mb-8">
-    <h1 class="text-2xl font-bold text-gray-800">✈️ Crew Schedule</h1>
+<div class="min-h-screen bg-slate-50 p-6 md:p-12 font-sans">
+  
+  <header class="max-w-7xl mx-auto flex justify-between items-center border-b-2 border-emerald-500 pb-6 mb-12">
+    <div class="flex items-center gap-3 group cursor-pointer">
+      <div class="bg-emerald-600 p-2 rounded-xl shadow-lg shadow-emerald-200 transition-transform group-hover:scale-110">
+        <span class="text-white font-black text-xl">OA</span>
+      </div>
+      <h1 class="text-2xl font-black text-slate-900 tracking-tighter italic">
+        Oak<span class="text-emerald-600">Air</span>
+      </h1>
+    </div>
+
     <button
-      (click)="logout()"
-      class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-6 rounded-lg transition-colors"
+      (click)="openLogoutConfirmation()"
+      class="flex items-center gap-2 bg-white border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-500 hover:text-emerald-700 font-bold py-2.5 px-6 rounded-2xl transition-all duration-300 shadow-sm text-xs uppercase tracking-widest"
     >
-      Exit
+      <span>Logout</span>
+      <span class="text-lg opacity-60">👤</span>
     </button>
   </header>
 
-  <main>
-    <div class="mb-6">
-      <h3 class="text-xl font-semibold text-gray-700">Welcome back, Captain!</h3>
-      <p class="text-gray-500">These are your flights for today:</p>
+  <main class="max-w-7xl mx-auto">
+    <div class="mb-12 space-y-2">
+      <h3 class="text-4xl font-black text-slate-900 tracking-tight">¡Hola, Oakland! ✨</h3>
+      <p class="text-slate-500 text-lg font-serif italic">Aquí tienes los detalles de tus próximas experiencias con nosotros.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="mb-6 flex items-center gap-4">
+      <h4 class="text-xs font-black text-emerald-700 uppercase tracking-[0.3em]">Tus Próximos Destinos</h4>
+      <div class="h-[1px] flex-1 bg-slate-200"></div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
       @for (flight of flights(); track flight.id) {
-        <app-flight-card [flight]="flight" (onReserve)="handleReserve($event)"> </app-flight-card>
+        <app-flight-card 
+          [flight]="flight" 
+          (onReserve)="handleReserve($event)"> 
+        </app-flight-card>
       } @empty {
-        <div class="col-span-full text-center py-10 bg-white rounded-xl shadow-sm">
-          <p class="text-gray-400 italic">No hay vuelos asignados hoy.</p>
+        <div class="col-span-full text-center py-24 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/50">
+          <div class="text-6xl mb-6 opacity-30">🌎</div>
+          <h4 class="text-2xl font-black text-slate-800 mb-2">Aún no tienes ningún viaje planeado</h4>
+          <p class="text-slate-400 font-medium italic mb-8 px-4">El mundo es demasiado grande para quedarse en un solo lugar.</p>
+          
+          <button
+            routerLink="/search"
+            class="bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 px-10 rounded-full transition-all duration-300 shadow-lg shadow-emerald-100 uppercase tracking-widest text-[10px]"
+          >
+            Encontrar mi primer paraíso
+          </button>
         </div>
       }
-      <!-- Con @empty, el código cuenta una historia:
-@for: "Para cada uno de estos vuelos..."
-@empty: "...y si resulta que no hay ninguno, pon esto". -->
     </div>
+
+    @if (flights().length > 0) {
+      <div class="mt-20 flex flex-col items-center gap-6">
+        <p class="text-slate-400 text-sm italic font-serif">¿Buscas algo diferente para tu próxima escapada?</p>
+        <button
+          routerLink="/search"
+          class="flex items-center gap-4 bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white font-black py-5 px-12 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 hover:shadow-none hover:-translate-y-1 active:scale-95 group uppercase tracking-widest text-xs"
+        >
+          <span class="text-xl group-hover:rotate-12 transition-transform">✈️</span>
+          <span>Explorar nuevos horizontes</span>
+          <span class="opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all text-xl">→</span>
+        </button>
+      </div>
+    }
   </main>
-  <div class="mt-12 flex justify-center">
-    <button
-      routerLink="/search"
-      class="flex items-center gap-3 bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 px-10 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 hover:shadow-none hover:-translate-y-1 active:scale-95 group uppercase tracking-widest text-xs"
-    >
-      <span class="text-lg group-hover:rotate-12 transition-transform">🔍</span>
 
-      Explorar nuevos destinos
-
-      <span class="opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all"
-        >→</span
-      >
-    </button>
-  </div>
+  <!-- Modal Logout -->
+  <app-logout-modal
+    [isOpen]="showLogoutModal()"
+    (onConfirm)="logout()"
+    (onCancel)="cancelLogout()"
+  ></app-logout-modal>
 </div>
