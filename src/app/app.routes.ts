@@ -1,21 +1,26 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login/login.component';
-import { FlightsComponent } from './components/flights/flights.component';
-import { authGuard } from './guards/auth-guard'; // Importamos nuestro guard
-import { FlightSearchComponent } from './components/flight-search/flight-search.component'; // Importamos el nuevo componente de búsqueda
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { 
-    path: 'flights', 
-    component: FlightsComponent, 
-    canActivate: [authGuard] // <--- Solo entras si el guard devuelve true
+  {
+    path: 'login',
+    loadComponent: () => import('./auth/login/login/login.component').then((m) => m.LoginComponent),
   },
-  { 
-    path: 'search', 
-    component: FlightSearchComponent,
-    canActivate: [authGuard] // <--- ¡Protégelo también! Solo para tripulación.
+  {
+    path: 'flights',
+    loadComponent: () => import('./components/flights/flights.component').then((m) => m.FlightsComponent),
+    canActivate: [authGuard],
   },
+  {
+    path: 'search',
+    loadComponent: () => import('./components/flight-search/flight-search.component').then((m) => m.FlightSearchComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'register',
+    loadComponent: () => import('./auth/register/register').then((m) => m.Register),
+  },
+
   { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login' },
 ];

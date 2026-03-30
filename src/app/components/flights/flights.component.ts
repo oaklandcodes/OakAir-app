@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { RouterLink } from '@angular/router';
@@ -12,10 +12,10 @@ import { LogoutModal } from '../logout-modal/logout-modal.component';
   standalone: true,
   imports: [RouterLink, FlightCardComponent,LogoutModal], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
   templateUrl: './flights.html',
-  
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-  export class FlightsComponent implements OnInit {
+export class FlightsComponent implements OnInit {
   // 1. Inyectamos los servicios necesarios
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -29,6 +29,7 @@ import { LogoutModal } from '../logout-modal/logout-modal.component';
 
   // 2. Signal para almacenar los vuelos
   flights = signal<Flight[]>([]);
+  username = computed(() => this.authService.username() || 'Viajero');
 
     ngOnInit(): void {
     // 3. Cargamos los vuelos al inicializar el componente

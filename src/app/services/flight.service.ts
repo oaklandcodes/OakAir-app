@@ -5,8 +5,8 @@ import { Observable } from 'rxjs'
 
 @Injectable({ providedIn: 'root' })
 export class FlightService {
-  private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:4000/flights'; // URL de tu backend
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:4000/api/flights';
 
   // Método para obtener todos los vuelos
   getflights(): Observable<Flight[]> {

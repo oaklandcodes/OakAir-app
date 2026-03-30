@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 
 interface LoginResponse {
   token: string;
+  username: string;
+  expiresIn: number;
 }
 
 @Injectable({
@@ -13,56 +15,99 @@ interface LoginResponse {
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly router = inject(Router);
-  private readonly TOKEN_KEY = 'auth-token'; // definimos una constante para guardar el token en localStorage
+  private readonly TOKEN_KEY = 'auth-token';
 
-
-  // Método seguro para obtener el token, solo accede a localStorage si estamos en un entorno de navegador
-  getSafeToken(): string | null {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem(this.TOKEN_KEY);
-    }
-    return null;
-  }
-  // Al iniciar la aplicación, comprobamos si ya hay un token en localStorage
-  // esto evita que que el f5 se desloguee al recargar la página
-  private _isAuthenticated = signal<boolean>(!!this.getSafeToken());
+  // Signal para almacenar el token en memoria
+  private readonly _token = signal<string | null>(this.loadTokenFromStorage());
+  
+  // Al iniciar la aplicación, comprobamos si ya hay un token en memoria
+  // esto evita que el f5 se desloguee al recargar la página
+  private readonly _isAuthenticated = signal<boolean>(!!this.getToken());
   readonly isAuthenticated = this._isAuthenticated.asReadonly();
+  private readonly _username = signal<string | null>(null);
+  readonly username = this._username.asReadonly();
 
-  // 1. Método para obtener el token (lo usará el Interceptor)
+  // Obtener el token del signal en memoria
   getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+    return this._token();
   }
 
-  // 2. Método para consultar el estado (lo usará el Guard)
-  // En Angular 18, para leer un signal se usan paréntesis ()
+  // Método para consultar el estado (lo usará el Guard)
   checkStatus(): boolean {
     return this.isAuthenticated();
   }
 
-  // 3. Login real contra backend
+  // Login real contra backend
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>('http://localhost:3000/auth/login', { email, password })
       .pipe(
         tap((response) => {
-          // Solo guardamos si hay ventana (navegador)
-          if (typeof window !== 'undefined') {
-            localStorage.setItem(this.TOKEN_KEY, response.token);
-          }
+          this._token.set(response.token);
+          this._username.set(response.username);
+          localStorage.setItem(this.TOKEN_KEY, response.token);
           this._isAuthenticated.set(true);
         }),
       );
   }
 
+  // Registro del nuevo usuario
+  newUser(username: string, email: string, password: string): Observable<void> {
+    return this.http
+      .post<void>('http://localhost:3000/auth/register', { username, email, password });
+  }
+
+  // Logout
   logout() {
-    // 1. Borramos del cajón (solo si hay ventana)
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem(this.TOKEN_KEY);
-    }
-    // 2. Avisamos a toda la app que ya no estamos autenticados
+    this._token.set(null);
+    localStorage.removeItem(this.TOKEN_KEY);
     this._isAuthenticated.set(false);
-    
-    // 3. Mandamos al usuario de patitas a la calle (al Login)
+    this._username.set(null);
     this.router.navigate(['/login']);
+  }
+
+  // ============ Métodos privados ============
+
+  // Cargar token del localStorage solo una vez al iniciar
+  private loadTokenFromStorage(): string | null {
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token) return null;
+    
+    // Validar que el token no esté expirado
+    if (this.isTokenExpired(token)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+      return null;
+    }
+    
+    // Extraer username del token y cargarlo en memoria
+    const payload = this.extractPayloadFromToken(token);
+    if (payload && payload['username']) {
+      this._username.set(payload['username'] as string || "Viajero");
+    }
+    
+    return token;
+  }
+
+  // Extraer el payload del JWT
+  private extractPayloadFromToken(token: string): Record<string, unknown> | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1])) as Record<string, unknown>;
+      return payload;
+    } catch {
+      return null;
+    }
+  }
+
+  // Validar si el token ha expirado
+  private isTokenExpired(token: string): boolean {
+    const payload = this.extractPayloadFromToken(token);
+    if (!payload) return true;
+    
+    try {
+      const exp = payload['exp'] as number;
+      return exp * 1000 < Date.now();
+    } catch {
+      return true;
+    }
   }
 }

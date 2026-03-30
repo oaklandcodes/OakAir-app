@@ -1,0 +1,20 @@
+<div class="space-y-2">
+  <label class="text-[10px] font-black text-emerald-700 uppercase tracking-widest ml-1">{{ label() }}</label>
+  <div class="relative group">
+    @if (icon()) {
+      <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">{{ icon() }}</span>
+    }
+
+    <input
+      [formControl]="control()"
+      [type]="type()"
+      [placeholder]="placeholder()"
+      [attr.autocomplete]="resolvedAutocomplete()"
+      class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300 placeholder:font-normal"
+    />
+  </div>
+
+  @if (displayError()) {
+    <p class="text-[9px] text-orange-500 font-bold ml-2 italic animate-pulse">{{ displayError() }}</p>
+  }
+</div>

@@ -23,9 +23,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         authService.logout(); // Usamos tu método logout que ya limpia todo
       }
 
-      // Lanzamos el error para que el componente también pueda manejarlo si quiere
-      const errorMessage = error.error?.message || 'Ocurrió un error inesperado';
-      return throwError(() => new Error(errorMessage));
+      // Reenviamos el HttpErrorResponse original para mantener status/code en componentes.
+      return throwError(() => error);
     }),
   );
 };

@@ -1,4 +1,4 @@
-import { Component, input, output} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Flight } from '../../model/flight.model';
 import { CommonModule } from '@angular/common';
 
@@ -7,7 +7,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './flight-card.html',
-  
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightCardComponent {
   // SIGNAL INPUT: Es obligatorio (required) y de tipo Flight

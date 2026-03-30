@@ -5,12 +5,28 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
+import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
+
+type Flight = {
+  id: string;
+  origin: string;
+  destination: string;
+  price: number;
+  date: string;
+};
+
+function getFlightsFromDb(): Flight[] {
+  const dbFilePath = join(process.cwd(), 'db.json');
+  const raw = readFileSync(dbFilePath, 'utf-8');
+  const parsed = JSON.parse(raw) as { flights?: Flight[] };
+  return parsed.flights ?? [];
+}
 
 /**
  * Example Express Rest API endpoints can be defined here.
@@ -23,6 +39,13 @@ const angularApp = new AngularNodeAppEngine();
  * });
  * ```
  */
+app.get('/api/flights', (_req, res) => {
+  try {
+    return res.json(getFlightsFromDb());
+  } catch {
+    return res.status(500).json({ status: 500, message: 'Error al leer vuelos' });
+  }
+});
 
 /**
  * Serve static files from /browser

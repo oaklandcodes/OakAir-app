@@ -20,38 +20,23 @@
     </header>
 
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
-      
-      <div class="space-y-2">
-        <label class="text-[10px] font-black text-emerald-700 uppercase tracking-widest ml-1">Tu Correo Electrónico</label>
-        <div class="relative group">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">✉️</span>
-          <input 
-            formControlName="email"
-            type="email" 
-            placeholder="ejemplo@correo.com"
-            class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300 placeholder:font-normal"
-          >
-        </div>
-        @if (form.get('email')?.touched && form.get('email')?.hasError('required')) {
-          <p class="text-red-400 text-[10px] font-bold italic ml-1">Por favor, introduce tu email</p>
-        }
-      </div>
+      <app-form-input
+        [label]="'Tu Correo Electrónico'"
+        [icon]="'✉️'"
+        [type]="'email'"
+        [placeholder]="'ejemplo@correo.com'"
+        [autocomplete]="'email'"
+        [control]="emailControl"
+      ></app-form-input>
 
-      <div class="space-y-2">
-        <label class="text-[10px] font-black text-emerald-700 uppercase tracking-widest ml-1">Tu Contraseña</label>
-        <div class="relative group">
-          <span class="absolute left-4 top-1/2 -translate-y-1/2 opacity-40 group-focus-within:opacity-100 transition-opacity">🔒</span>
-          <input 
-            formControlName="password"
-            type="password" 
-            placeholder="••••••••"
-            class="w-full pl-12 pr-4 py-4 bg-slate-50 border-2 border-transparent focus:border-emerald-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-slate-700 placeholder:text-slate-300"
-          >
-        </div>
-        @if (form.get('password')?.touched && form.get('password')?.hasError('required')) {
-          <p class="text-red-400 text-[10px] font-bold italic ml-1">La contraseña es necesaria</p>
-        }
-      </div>
+      <app-form-input
+        [label]="'Tu Contraseña'"
+        [icon]="'🔒'"
+        [type]="'password'"
+        [placeholder]="'••••••••'"
+        [autocomplete]="'current-password'"
+        [control]="passwordControl"
+      ></app-form-input>
 
       @if (error()) {
         <div class="bg-red-50 border border-red-100 p-4 rounded-xl animate-shake">
@@ -59,14 +44,12 @@
         </div>
       }
 
-      <button 
-        type="submit" 
+      <app-form-submit-button
+        [label]="'Comenzar mi viaje'"
+        [loadingLabel]="'Preparando maletas...'"
+        [loading]="loading()"
         [disabled]="loading() || form.invalid"
-        class="w-full mt-4 bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none active:scale-95 uppercase tracking-[0.2em] text-[11px] flex justify-center items-center gap-3 group"
-      >
-        {{ loading() ? 'Preparando maletas...' : 'Comenzar mi viaje' }}
-        <span class="group-hover:translate-x-1 transition-transform">✨</span>
-      </button>
+      ></app-form-submit-button>
     </form>
 
     <div class="mt-6 pt-4 border-t border-slate-50 text-center">
