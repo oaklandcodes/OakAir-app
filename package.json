@@ -3,8 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --configuration development",
+    "start:api": "ng serve --configuration development",
+    "start:local": "ng serve --configuration local",
     "build": "ng build",
+    "build:api": "ng build --configuration development",
+    "build:local": "ng build --configuration local",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:vueling-crew-app": "node dist/vueling-crew-app/server/server.mjs"
