@@ -18,14 +18,38 @@ export class AuthService {
   private readonly TOKEN_KEY = 'auth-token';
 
   // Signal para almacenar el token en memoria
-  private readonly _token = signal<string | null>(this.loadTokenFromStorage());
+  private readonly _token = signal<string | null>(null);
   
   // Al iniciar la aplicación, comprobamos si ya hay un token en memoria
   // esto evita que el f5 se desloguee al recargar la página
-  private readonly _isAuthenticated = signal<boolean>(!!this.getToken());
+  private readonly _isAuthenticated = signal<boolean>(false);
   readonly isAuthenticated = this._isAuthenticated.asReadonly();
   private readonly _username = signal<string | null>(null);
   readonly username = this._username.asReadonly();
+
+  constructor() {
+    this.initializeAuthFromStorage();
+  }
+
+  private initializeAuthFromStorage(): void {
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token) return;
+    
+    // Validar que el token no esté expirado
+    if (this.isTokenExpired(token)) {
+      localStorage.removeItem(this.TOKEN_KEY);
+      return;
+    }
+    
+    // Extraer username del token y cargarlo en memoria
+    const payload = this.extractPayloadFromToken(token);
+    if (payload && payload['username']) {
+      this._username.set(payload['username'] as string);
+    }
+    
+    this._token.set(token);
+    this._isAuthenticated.set(true);
+  }
 
   // Obtener el token del signal en memoria
   getToken(): string | null {
@@ -77,12 +101,6 @@ export class AuthService {
     if (this.isTokenExpired(token)) {
       localStorage.removeItem(this.TOKEN_KEY);
       return null;
-    }
-    
-    // Extraer username del token y cargarlo en memoria
-    const payload = this.extractPayloadFromToken(token);
-    if (payload && payload['username']) {
-      this._username.set(payload['username'] as string || "Viajero");
     }
     
     return token;

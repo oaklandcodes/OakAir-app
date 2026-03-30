@@ -4,6 +4,21 @@ import { AUTH_VALIDATION_RULES } from '../shared/auth-validation';
 export class OakAirValidators {
   
   /**
+   * Validador de Email más estricto
+   * Requiere el formato clásico: usuario@dominio.extensión
+   */
+  static email(control: AbstractControl): ValidationErrors | null {
+    const value = String(control.value ?? '');
+    if (!value) return null; // Si está vacío, no validamos (se encarga Validators.required)
+
+    // Regex para validar email: usuario@dominio.extensión
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValidEmail = emailRegex.test(value);
+
+    return !isValidEmail ? { email: true } : null;
+  }
+
+  /**
    * Validador para nombres prohibidos (Static)
    * No deja que el usuario use "admin" (mayúsculas o minúsculas)
    */

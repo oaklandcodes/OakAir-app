@@ -14,7 +14,13 @@
     />
   </div>
 
-  @if (displayError()) {
-    <p class="text-[9px] text-orange-500 font-bold ml-2 italic animate-pulse">{{ displayError() }}</p>
-  }
+     @if (control() && control().invalid && control().touched) {
+      <div class="flex flex-col gap-2">
+        @for (error of getErrorMessage(); track $index) {
+          <p class="text-red-500 text-sm mt-1">
+            {{ error }}
+          </p>
+        }
+      </div>
+    }
 </div>

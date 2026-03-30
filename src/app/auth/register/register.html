@@ -47,6 +47,15 @@
         [control]="passwordControl"
       ></app-form-input>
 
+      <app-form-input
+        [label]="'Confirmar Contraseña'"
+        [icon]="'🔒'"
+        [type]="'password'"
+        [placeholder]="'••••••••'"
+        [autocomplete]="'new-password'"
+        [control]="confirmPasswordControl"
+      ></app-form-input>
+
       <app-form-submit-button
         [label]="'Comenzar mi viaje'"
         [loadingLabel]="'Emitiendo pasaporte...'"

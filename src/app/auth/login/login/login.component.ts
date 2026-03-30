@@ -6,6 +6,8 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { finalize } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AUTH_VALIDATION_MESSAGES, AUTH_VALIDATION_RULES } from '../../../shared/auth-validation';
+import { getValidationText } from '../../../components/formValidation/validation-errors';
+import { OakAirValidators } from '../../../utils/validators';
 import { merge, startWith } from 'rxjs';
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../../../components/form-submit-button/form-submit-button.component';
@@ -26,7 +28,7 @@ export class LoginComponent implements OnInit {
   error = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, OakAirValidators.email]],
     password: ['', [Validators.required, Validators.minLength(AUTH_VALIDATION_RULES.passwordMinLength)]],
   });
 
@@ -36,16 +38,14 @@ export class LoginComponent implements OnInit {
   constructor() {
     this.bindFrontendApiError(this.emailControl, () => {
       if (!this.emailControl.touched) return null;
-      if (this.emailControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.email.required;
-      if (this.emailControl.hasError('email')) return AUTH_VALIDATION_MESSAGES.email.invalid;
-      return null;
+      const validationErrors = getValidationText(this.emailControl.errors);
+      return validationErrors.length > 0 ? validationErrors[0] : null;
     });
 
     this.bindFrontendApiError(this.passwordControl, () => {
       if (!this.passwordControl.touched) return null;
-      if (this.passwordControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.password.required;
-      if (this.passwordControl.hasError('minlength')) return AUTH_VALIDATION_MESSAGES.password.minLength;
-      return null;
+      const validationErrors = getValidationText(this.passwordControl.errors);
+      return validationErrors.length > 0 ? validationErrors[0] : null;
     });
   }
 

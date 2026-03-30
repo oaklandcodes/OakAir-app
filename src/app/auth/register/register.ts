@@ -5,6 +5,8 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { OakAirValidators } from '../../utils/validators';
+import { matchFields } from '../../components/formValidation/validations';
+import { getValidationText } from '../../components/formValidation/validation-errors';
 import { HttpErrorResponse } from '@angular/common/http';
 import { merge, startWith } from 'rxjs';
 import {
@@ -43,7 +45,7 @@ export class Register {
       nonNullable: true,
     }),
     email: this.fb.control('', {
-      validators: [Validators.required, Validators.email],
+      validators: [Validators.required, OakAirValidators.email],
       nonNullable: true,
     }),
     password: this.fb.control('', {
@@ -54,11 +56,16 @@ export class Register {
       ],
       nonNullable: true,
     }),
-  });
+    confirmPassword: this.fb.control('', {
+      validators: [Validators.required],
+      nonNullable: true,
+    }),
+  }, { validators: matchFields('password', 'confirmPassword') });
 
   readonly usernameControl = this.registerForm.controls.username;
   readonly emailControl = this.registerForm.controls.email;
   readonly passwordControl = this.registerForm.controls.password;
+  readonly confirmPasswordControl = this.registerForm.controls.confirmPassword;
 
   constructor() {
     this.bindFrontendApiError(this.usernameControl, () => {
@@ -81,6 +88,14 @@ export class Register {
       if (this.passwordControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.password.required;
       if (this.passwordControl.hasError('minlength')) return AUTH_VALIDATION_MESSAGES.password.minLength;
       if (this.passwordControl.hasError('passwordStrength')) return AUTH_VALIDATION_MESSAGES.password.strength;
+      return null;
+    });
+
+    this.bindFrontendApiError(this.confirmPasswordControl, () => {
+      if (!this.confirmPasswordControl.touched) return null;
+      const errors = this.confirmPasswordControl.errors;
+      if (errors?.['required']) return 'El campo es requerido';
+      if (errors?.['fieldsMismatch']) return 'Los campos no coinciden';
       return null;
     });
   }

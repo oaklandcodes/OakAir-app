@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, effect } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { getValidationText } from '../formValidation/validation-errors';
 
 @Component({
   selector: 'app-form-input',
@@ -32,10 +33,10 @@ export class FormInputComponent {
     return 'off';
   });
 
-  readonly displayError = computed(() => {
-    const control = this.control();
-    if (!control.touched) return null;
+  getErrorMessage(): string[] {
+    const errors = this.control().errors;
+    const text = getValidationText(errors);
+    return text;
+  }
 
-    return control.errors?.['apiError'] ?? null;
-  });
 }
