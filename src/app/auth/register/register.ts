@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { OakAirValidators } from '../../utils/validators';
 import { matchFields } from '../../components/formValidation/validations';
@@ -20,7 +20,7 @@ import { FormSubmitButtonComponent } from '../../components/form-submit-button/f
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, FormInputComponent, FormSubmitButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent],
   templateUrl: './register.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,0 +1,12 @@
+[
+  { "id": "VY1001", "origin": "BCN", "destination": "ORY", "price": 49.99, "date": "2026-04-02" },
+  { "id": "VY2142", "origin": "BCN", "destination": "FCO", "price": 62.50, "date": "2026-04-02" },
+  { "id": "VY3988", "origin": "BCN", "destination": "AMS", "price": 78.0, "date": "2026-04-03" },
+  { "id": "VY1512", "origin": "BCN", "destination": "LGW", "price": 91.2, "date": "2026-04-03" },
+  { "id": "VY8430", "origin": "BCN", "destination": "CDG", "price": 58.95, "date": "2026-04-04" },
+  { "id": "VY6201", "origin": "BCN", "destination": "LIS", "price": 54.0, "date": "2026-04-04" },
+  { "id": "VY2994", "origin": "BCN", "destination": "BRU", "price": 69.99, "date": "2026-04-05" },
+  { "id": "VY4455", "origin": "BCN", "destination": "DUB", "price": 72.3, "date": "2026-04-05" },
+  { "id": "VY7822", "origin": "BCN", "destination": "ZRH", "price": 83.5, "date": "2026-04-06" },
+  { "id": "VY9900", "origin": "BCN", "destination": "BER", "price": 76.8, "date": "2026-04-06" }
+]
