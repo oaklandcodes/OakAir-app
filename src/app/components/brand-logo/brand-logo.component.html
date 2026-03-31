@@ -1,0 +1,30 @@
+<div
+  routerLink="/dashboard"
+  [class]="stacked() ? 'flex flex-col items-center gap-3 md:gap-4 group cursor-pointer' : 'flex items-center gap-3 group cursor-pointer'"
+>
+  <div
+    [class]="stacked()
+      ? 'bg-emerald-600 p-4 rounded-3xl shadow-2xl shadow-emerald-200/50 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3'
+      : 'bg-emerald-600 p-2.5 rounded-2xl shadow-xl shadow-emerald-200/50 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3'"
+  >
+    <span
+      [class]="stacked()
+        ? 'text-white font-black text-3xl md:text-4xl tracking-tighter italic leading-none'
+        : 'text-white font-black text-xl italic leading-none'"
+    >
+      OA
+    </span>
+  </div>
+
+  <div [class]="stacked() ? 'text-center' : ''">
+    <h1 class="text-2xl md:text-4xl font-black text-slate-900 tracking-tighter italic">
+      Oak<span class="text-emerald-600">Air</span>
+    </h1>
+
+    @if (showTagline()) {
+      <p class="text-slate-400 font-bold tracking-[0.4em] uppercase text-[9px] mt-2 italic">
+        Boutique Travel Experience
+      </p>
+    }
+  </div>
+</div>

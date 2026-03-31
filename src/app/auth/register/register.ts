@@ -17,10 +17,11 @@ import {
 } from '../../shared/auth-validation';
 import { FormInputComponent } from '../../components/form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../../components/form-submit-button/form-submit-button.component';
+import { BrandLogoComponent } from '../../components/brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent],
   templateUrl: './register.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -6,11 +6,12 @@ import { FlightCardComponent } from '../flight-card/flight-card.component';
 import { Flight } from '../../model/flight.model';
 import { FlightService } from '../../services/flight.service';
 import { LogoutModal } from '../logout-modal/logout-modal.component';
+import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [RouterLink, FlightCardComponent,LogoutModal], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
+  imports: [RouterLink, FlightCardComponent, LogoutModal, BrandLogoComponent], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
   templateUrl: './flights.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

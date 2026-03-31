@@ -7,6 +7,15 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/login/login/login.component').then((m) => m.LoginComponent),
   },
   {
+    path: 'register',
+    loadComponent: () => import('./auth/register/register').then((m) => m.Register),
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    canActivate: [authGuard],
+  },
+  {
     path: 'flights',
     loadComponent: () => import('./components/flights/flights.component').then((m) => m.FlightsComponent),
     canActivate: [authGuard],
@@ -16,11 +25,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/flight-search/flight-search.component').then((m) => m.FlightSearchComponent),
     canActivate: [authGuard],
   },
-  {
-    path: 'register',
-    loadComponent: () => import('./auth/register/register').then((m) => m.Register),
-  },
 
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
-  { path: '**', redirectTo: 'login' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  { path: '**', redirectTo: 'dashboard' },
 ];

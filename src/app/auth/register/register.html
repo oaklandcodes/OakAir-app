@@ -1,15 +1,7 @@
 <div class="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-6 font-sans">
   
-  <div class="mb-10 flex flex-col items-center gap-4">
-    <div class="bg-emerald-600 p-5 rounded-3xl shadow-2xl shadow-emerald-200/50 transform hover:scale-105 transition-transform duration-500">
-      <span class="text-white font-black text-4xl tracking-tighter italic text-[32px]">OA</span>
-    </div>
-    <div class="text-center">
-      <h1 class="text-4xl font-black text-slate-900 tracking-tighter italic">
-        Oak<span class="text-emerald-600">Air</span>
-      </h1>
-      <p class="text-slate-400 font-bold tracking-[0.4em] uppercase text-[9px] mt-2 italic">Boutique Travel Experience</p>
-    </div>
+  <div class="mb-10">
+    <app-brand-logo [stacked]="true" [showTagline]="true"></app-brand-logo>
   </div>
 
   <div class="w-full max-w-md bg-white rounded-[3rem] shadow-2xl shadow-slate-200/60 border border-slate-100 p-10 md:p-14">

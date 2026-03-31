@@ -7,7 +7,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "vueling-crew-app": {
+    "oak-air-app": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -71,13 +71,13 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "vueling-crew-app:build:production"
+              "buildTarget": "oak-air-app:build:production"
             },
             "development": {
-              "buildTarget": "vueling-crew-app:build:development"
+              "buildTarget": "oak-air-app:build:development"
             },
             "local": {
-              "buildTarget": "vueling-crew-app:build:local"
+              "buildTarget": "oak-air-app:build:local"
             }
           },
           "defaultConfiguration": "development"

@@ -7,16 +7,18 @@ import {
   FormBuilder,
 } from '@angular/forms';
 import { catchError, finalize, merge, of, startWith } from 'rxjs';
+import { RouterLink } from '@angular/router';
 import { FlightService } from '../../services/flight.service';
 import { Flight } from '../../model/flight.model';
 import { FlightCardComponent } from '../flight-card/flight-card.component';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../form-submit-button/form-submit-button.component';
+import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [ReactiveFormsModule, FlightCardComponent, FormInputComponent, FormSubmitButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, FlightCardComponent, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent],
   templateUrl: './flight-search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

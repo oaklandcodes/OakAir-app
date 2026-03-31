@@ -11,10 +11,11 @@ import { OakAirValidators } from '../../../utils/validators';
 import { merge, startWith } from 'rxjs';
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../../../components/form-submit-button/form-submit-button.component';
+import { BrandLogoComponent } from '../../../components/brand-logo/brand-logo.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
