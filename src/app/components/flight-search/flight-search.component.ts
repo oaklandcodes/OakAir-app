@@ -1,11 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  FormControl,
-  Validators,
-  ReactiveFormsModule,
-  FormBuilder,
-} from '@angular/forms';
+import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, finalize, merge, of, startWith } from 'rxjs';
 import { RouterLink } from '@angular/router';
 import { FlightService } from '../../services/flight.service';
@@ -23,22 +18,19 @@ import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightSearchComponent implements OnInit {
-
-  //1. Inyecciones necesarias con inject
   private readonly fb = inject(FormBuilder);
   private readonly flightService = inject(FlightService);
 
-  //2.Signal para los vuelos que vienen de la API
-  readonly searchAllFlights = signal<Flight[]>([]);
+  private readonly allFlights = signal<Flight[]>([]);
+
+  readonly matchingFlights = signal<Flight[]>([]);
   readonly loading = signal(false);
   readonly hasSearched = signal(false);
+  readonly canSearch = signal(false);
 
-  //3. Formulario reactivo
   readonly flightForm = this.fb.nonNullable.group({
-    origin: ['', Validators.required],
-    destination: ['', Validators.required],
-    passengers: [1, [Validators.required, Validators.min(1)]],
-    date: ['', Validators.required],
+    origin: ['', [Validators.required, Validators.minLength(2)]],
+    destination: ['', [Validators.required, Validators.minLength(2)]],
   });
 
   readonly originControl = this.flightForm.controls.origin;
@@ -56,6 +48,9 @@ export class FlightSearchComponent implements OnInit {
       if (this.destinationControl.hasError('required')) return 'Indica el destino del viaje';
       return null;
     });
+
+    this.bindSearchState();
+    this.updateCanSearch();
   }
 
   private bindFrontendApiError(control: FormControl<string>, getMessage: () => string | null): void {
@@ -81,45 +76,69 @@ export class FlightSearchComponent implements OnInit {
     }
   }
 
-  readonly canSearch = computed(() => this.flightForm.valid && !this.loading());
+  private bindSearchState(): void {
+    this.flightForm.statusChanges.pipe(startWith(this.flightForm.status), takeUntilDestroyed()).subscribe(() => {
+      this.updateCanSearch();
+    });
 
-  //4. Método para manejar la búsqueda
+    this.flightForm.valueChanges.pipe(startWith(this.flightForm.getRawValue()), takeUntilDestroyed()).subscribe(() => {
+      this.updateCanSearch();
+    });
+  }
+
+  private updateCanSearch(): void {
+    this.canSearch.set(this.flightForm.valid && !this.loading());
+  }
+
   onSearch(): void {
     if (this.flightForm.invalid) return;
+
     this.hasSearched.set(true);
     this.loading.set(true);
+    this.updateCanSearch();
 
-    // Extraemos los valores del formulario
     const { origin, destination } = this.flightForm.getRawValue();
-    
-  //Llamamos al servicio para obtener los vuelos (aqui practicamos el filtrado)
- 
+    const originQuery = origin.trim().toLowerCase();
+    const destinationQuery = destination.trim().toLowerCase();
+
+    this.filterFlights(originQuery, destinationQuery);
+    this.loading.set(false);
+    this.updateCanSearch();
+  }
+
+  ngOnInit(): void {
+    this.loading.set(true);
+    this.updateCanSearch();
+
     this.flightService
       .getflights()
       .pipe(
         catchError((error) => {
-          console.error('Error al cargar vuelos', error);
+          console.error('Error loading flights', error);
           return of([] as Flight[]);
         }),
         finalize(() => this.loading.set(false)),
       )
-      .subscribe((vuelos: Flight[]) => {
-        const filteredFlights = vuelos.filter(
-          (flight: Flight) =>
-            flight.origin.toLowerCase() === origin.toLowerCase() &&
-            flight.destination.toLowerCase() === destination.toLowerCase(),
-        );
-        this.searchAllFlights.set(filteredFlights);
+      .subscribe((flights: Flight[]) => {
+        this.allFlights.set(flights);
+        this.matchingFlights.set(flights);
+        this.updateCanSearch();
       });
-
   }
 
-  ngOnInit(): void {
-    //5. Cargamos todos los vuelos al iniciar el componente
-    this.flightService.getflights().subscribe((flightsList) => {
-      this.searchAllFlights.set(flightsList);
-      this.loading.set(false);
+  private filterFlights(originQuery: string, destinationQuery: string): void {
+    const filteredFlights = this.allFlights().filter((flight) => {
+      const flightOrigin = flight.origin.toLowerCase();
+      const flightDestination = flight.destination.toLowerCase();
+      const flightId = flight.id.toLowerCase();
+
+      return (
+        (flightOrigin.includes(originQuery) || flightId.includes(originQuery)) &&
+        (flightDestination.includes(destinationQuery) || flightId.includes(destinationQuery))
+      );
     });
+
+    this.matchingFlights.set(filteredFlights);
   }
 }
 

@@ -50,17 +50,33 @@
     </div>
 
     <div class="mt-20">
-      @if (searchAllFlights().length > 0) {
-        <h3 class="text-xl font-black text-slate-800 mb-8 px-2 uppercase tracking-widest">Resultados encontrados</h3>
+      @if (matchingFlights().length > 0) {
+        <div class="mb-8 px-2 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <h3 class="text-xl font-black text-slate-800 uppercase tracking-widest">Resultados encontrados</h3>
+          @if (hasSearched()) {
+            <a
+              routerLink="/flights"
+              class="inline-flex items-center justify-center rounded-2xl border-2 border-slate-200 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-slate-600 transition-all hover:border-emerald-500 hover:text-emerald-700"
+            >
+              Ver todos los vuelos
+            </a>
+          }
+        </div>
       }
       
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @for (flight of searchAllFlights(); track flight.id) {
+        @for (flight of matchingFlights(); track flight.id) {
           <app-flight-card [flight]="flight"></app-flight-card>
         } @empty {
           @if (hasSearched()) {
-            <div class="col-span-full text-center py-10">
+            <div class="col-span-full text-center py-10 space-y-5">
               <p class="text-slate-400 italic">No hemos encontrado vuelos para esa ruta. Prueba con otro paraíso.</p>
+              <a
+                routerLink="/flights"
+                class="inline-flex items-center justify-center rounded-2xl border-2 border-slate-200 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-slate-600 transition-all hover:border-emerald-500 hover:text-emerald-700"
+              >
+                Volver a vuelos
+              </a>
             </div>
           }
         }

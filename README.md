@@ -1,264 +1,321 @@
-# Oak Air App - Portfolio Angular
+# Oak Air App - Angular Portfolio Project
 
-Proyecto de practica personal para reforzar habilidades frontend con Angular Standalone.
+Aplicacion SPA hecha con Angular Standalone para practicar y demostrar habilidades junior en:
 
-La app simula un flujo real de autenticacion y gestion de vuelos, con enfoque en:
+- autenticacion con JWT
+- rutas protegidas con guard
+- manejo de formularios reactivos y validaciones
+- arquitectura por servicios intercambiables (API real o local)
+- componentes reutilizables
 
-- CRUD (en esta version: Create y Read implementados)
-- Login con JWT
-- Validaciones de formularios
-- Componentizacion y reutilizacion de UI
+Este repo esta pensado para mostrar implementacion tecnica, decisiones de arquitectura y capacidad de evolucion del producto.
 
-## Estado actual (Marzo 2026)
+## Demo funcional (que se puede probar hoy)
 
-- Branding unificado a OakAir en las pantallas principales.
-- Nuevo Dashboard protegido por auth guard.
-- Navegacion actualizada para usar dashboard como punto de entrada autenticado.
-- Componente reutilizable de marca para mantener la misma animacion/logo en toda la app.
-- Estilos unificados con Tailwind en las vistas principales.
-
-## Que practique en este proyecto
-
-### 1) CRUD
-
-- Create: registro de nuevos usuarios (via API o en localStorage, segun entorno).
-- Read: listado y busqueda/filtrado de vuelos (via API o en localStorage, segun entorno).
-- Nota: la base del proyecto permite extender facilmente Update y Delete.
-
-### 2) Autenticacion con JWT
-
-- Login por entorno:
-	- modo API: login real contra backend
-	- modo local: validacion en localStorage y JWT simulado
-- Persistencia del token en localStorage.
-- Lectura y validacion basica del payload (incluida expiracion).
-- Http Interceptor para adjuntar Authorization: Bearer token en cada request.
-- Guard de rutas para proteger pantallas privadas.
-- Logout con limpieza de estado y redireccion a login.
-
-### 3) Validaciones de inputs (frontend + backend)
-
-- Reactive Forms con validaciones nativas:
-	- required
-	- minLength
-	- validacion de email
-- Validaciones custom:
-	- fuerza de password
-	- nombres prohibidos
-	- confirmacion de password (match entre campos)
-- Mapeo de errores de backend a mensajes claros por campo.
-
-### 4) Componentizacion
-
-- Componentes reutilizables para formularios:
-	- input reutilizable
-	- boton submit reutilizable
-- Componente reutilizable de marca:
-	- brand-logo (logo OA + OakAir con animacion consistente)
-- Componentes desacoplados por responsabilidad:
-	- login
-	- register
-	- dashboard
-	- flights
-	- flight-search
-	- flight-card
-	- modal de logout
+- Login y Register completos.
+- Dashboard privado.
+- Listado y buscador de vuelos.
+- Interceptors para token y errores globales.
+- Persistencia de sesion por localStorage.
+- Modo local sin backend para demo inmediata.
 
 ## Stack tecnico
 
 - Angular 21 (Standalone API)
 - TypeScript
 - RxJS
-- Angular Router + Guards
-- Interceptors + Signals
-- Signals para estado de autenticacion
-- Configuracion por entorno (API y local)
+- Angular Router + Functional Guards
+- Http Interceptors
+- Angular Signals (estado de autenticacion)
 - Tailwind CSS
 
-## Estructura principal
+## Arquitectura resumida
+
+La app usa abstracciones para desacoplar reglas de negocio del origen de datos:
+
+- AuthService (abstracto)
+- FlightService (abstracto)
+- Implementaciones por entorno:
+  - ApiAuthService / ApiFlightService
+  - LocalAuthService / LocalFlightService
+
+La seleccion de implementacion se hace en tiempo de arranque usando environment.useLocalData.
 
 ```text
 src/
-	app/
-		auth/
-		components/
-			brand-logo/
-			dashboard/
-		guards/
-		services/
-		shared/
-		utils/
-	interceptor/
+  app/
+    auth/
+    components/
+    guards/
+    model/
+    services/
+    shared/
+    utils/
+  environments/
+  interceptor/
 ```
 
-## Como ejecutar el proyecto
+## Funcionalidades clave
 
-### 1) Instalar dependencias
+### 1) Autenticacion
+
+- Login en modo API (backend real) o modo local (simulado).
+- Token JWT guardado en localStorage.
+- Lectura de payload y validacion de expiracion.
+- Logout con limpieza de estado + redireccion.
+
+### 2) Seguridad de rutas
+
+- authGuard para proteger:
+  - /dashboard
+  - /flights
+  - /search
+- Redireccion automatica a /login si no hay sesion valida.
+
+### 3) Formularios y validaciones
+
+- Reactive Forms.
+- Reglas nativas: required, minlength, email.
+- Reglas custom: password strength, forbidden name, confirm password.
+- Mapeo de errores de backend a mensajes por campo.
+
+### 4) Vuelos
+
+- Read: listado de vuelos.
+- Search: filtro de vuelos desde la UI.
+- Datos desde API o semilla local segun entorno.
+
+## Scripts
+
+```bash
+npm install
+npm run start        # dev por defecto (API)
+npm run start:api
+npm run start:local  # demo sin backend
+npm run build
+npm run build:api
+npm run build:local
+npm run test
+```
+
+Frontend en: http://localhost:4200
+
+## Como probar el proyecto (paso a paso)
+
+
+### Opcion A (recomendada): probar sin backend en modo local
+
+1. Instala dependencias:
 
 ```bash
 npm install
 ```
 
-### 2) Levantar frontend Angular
-
-```bash
-npm run start
-```
-
-Aplicacion en:
-
-http://localhost:4200
-
-### 3) Modos de ejecucion por entorno
-
-Modo API:
-
-```bash
-npm run start:api
-```
-
-Modo local (sin backend):
+2. Levanta la app en modo local:
 
 ```bash
 npm run start:local
 ```
 
-Build API:
+3. Abre en navegador:
+
+http://localhost:4200
+
+4. Prueba el flujo completo:
+
+- Entra a /register y crea un usuario.
+- Inicia sesion en /login con ese usuario.
+- Verifica acceso a /dashboard, /flights y /search.
+- Cierra sesion y confirma redireccion a /login.
+
+Que usa internamente este modo:
+
+- Usuarios y token en localStorage.
+- Vuelos semilla en localStorage.
+- No requiere backend externo.
+
+### Opcion B: probar con backend/API
+
+1. Instala dependencias:
 
 ```bash
-npm run build:api
+npm install
 ```
 
-Build local:
+2. Levanta tu backend en puerto 3000 (debe cumplir el contrato de esta README).
+
+3. En otra terminal, levanta el frontend en modo API:
 
 ```bash
-npm run build:local
+npm run start:api
 ```
 
-### 4) Contrato API (modo API)
+4. Abre en navegador:
 
-Si quieres usar esta app en modo API, el backend debe exponer estos endpoints:
+http://localhost:4200
 
-- Base URL: http://localhost:3000
-- POST /auth/login
-- POST /auth/register
-- GET /flights
+5. Valida login/register/flights contra API real.
 
-Request esperado en login:
+### Verificacion rapida para recruiters
+
+- La app compila: npm run build:local
+- La navegacion protegida funciona (guard redirige a /login sin sesion)
+- El token se envia en Authorization cuando hay sesion
+- Los errores 401 fuerzan logout via interceptor global
+
+### Problemas comunes
+
+- Error de CORS en modo API:
+  - habilita CORS en backend para http://localhost:4200
+- Error de conexion al backend:
+  - verifica que API este en http://localhost:3000
+- No ves vuelos en modo local:
+  - limpia localStorage del navegador y recarga
+
+## Entornos
+
+- API mode: src/environments/environment.ts
+- Local mode: src/environments/environment.local.ts
+
+El modo local se activa con file replacement usando la configuracion local de angular.json.
+
+## Contrato esperado de backend (modo API)
+
+Base URL: http://localhost:3000
+
+### POST /auth/login
+
+Request:
 
 ```json
 {
-	"email": "oak@example.com",
-	"password": "Pass1234"
+  "email": "oak@example.com",
+  "password": "Pass1234"
 }
 ```
 
-Response esperado en login (200):
+Response 200:
 
 ```json
 {
-	"token": "eyJhbGciOi...",
-	"username": "oakland",
-	"expiresIn": 28800
+  "token": "eyJhbGciOi...",
+  "username": "oakland",
+  "expiresIn": 28800
 }
 ```
 
-Notas sobre el token JWT:
-
-- Debe ser un JWT valido (formato header.payload.signature).
-- En el payload debe existir claim exp (timestamp en segundos).
-- En el payload debe existir claim username para restaurar sesion tras recarga.
-
-Payload minimo esperado del JWT:
+JWT payload minimo esperado:
 
 ```json
 {
-	"username": "oakland",
-	"exp": 1760000000
+  "username": "oakland",
+  "exp": 1760000000
 }
 ```
 
-Request esperado en register:
+### POST /auth/register
+
+Request:
 
 ```json
 {
-	"username": "oakland",
-	"email": "oak@example.com",
-	"password": "Pass1234"
+  "username": "oakland",
+  "email": "oak@example.com",
+  "password": "Pass1234"
 }
 ```
 
-Response esperado en register (201 o 200):
+Response: 200 o 201
 
-```json
-{}
-```
+Error esperado:
 
-Errores esperados en register:
-
-- 409 cuando el email ya existe.
-- 400 con formato de errores por campo:
+- 409 cuando email ya existe.
+- 400 con errores por campo:
 
 ```json
 {
-	"errors": [
-		{ "field": "email", "message": "email invalido" },
-		{ "field": "password", "message": "password debil" }
-	]
+  "errors": [
+    { "field": "email", "message": "email invalido" },
+    { "field": "password", "message": "password debil" }
+  ]
 }
 ```
 
-Response esperado en flights (200):
+### GET /flights
+
+Response 200:
 
 ```json
 [
-	{
-		"id": "VY1001",
-		"origin": "BCN",
-		"destination": "ORY",
-		"price": 49.99,
-		"date": "2026-04-02"
-	}
+  {
+    "id": "VY1001",
+    "origin": "BCN",
+    "destination": "ORY",
+    "price": 49.99,
+    "date": "2026-04-02"
+  }
 ]
 ```
 
-Errores esperados en login:
-
-- 401 para credenciales incorrectas.
-
-Cabecera Authorization:
-
-- La app envia Authorization: Bearer <token> en las peticiones cuando hay sesion activa.
-
-### 5) Modo sin API
-
-Esta version funciona sin backend externo:
-
-- Usuarios y token se guardan en localStorage.
-- El listado de vuelos se inicializa desde datos semilla locales.
-- El flujo de login, register y rutas protegidas funciona en local.
+La app envia header Authorization: Bearer <token> si hay sesion activa.
 
 ## Rutas principales
 
 - /login
 - /register
-- /dashboard (protegida)
-- /flights (protegida)
-- /search (protegida)
+- /dashboard (privada)
+- /flights (privada)
+- /search (privada)
 
-## Objetivo profesional
+## Estado de calidad
 
-Este proyecto forma parte de mi portfolio para demostrar competencias de nivel junior en Angular, especialmente en:
+- Build local validado con exito (npm run build:local).
+- Hay tests base, pero falta ampliar cobertura para servicios, guard e interceptors.
 
-- arquitectura por componentes
-- autenticacion con JWT
-- manejo de formularios y validaciones
-- simulacion de backend en local para demos funcionales
-- buenas practicas de organizacion de codigo
+## Capturas de pantalla
 
-## Proximas mejoras
+Guarda las imagenes en la carpeta `docs/images` para que GitHub las renderice correctamente.
 
-- Completar Update/Delete en vuelos para cerrar CRUD completo.
-- Agregar tests unitarios adicionales en servicios, guards y formularios.
-- Añadir manejo de refresh token y roles/permisos.
-- Mejorar experiencia visual y estados de carga/empty/error.
+### 1) Login
+
+![Login - Oak Air App](./docs/images/01-login.png)
+
+### 2) Registro con validaciones
+
+![Registro con validaciones](./docs/images/02-register-validation.png)
+
+### 3) Dashboard privado
+
+![Dashboard privado](./docs/images/03-dashboard.png)
+
+### 4) Listado de vuelos
+
+![Listado de vuelos](./docs/images/04-flights-list.png)
+
+### 5) Busqueda de vuelos
+
+![Busqueda de vuelos](./docs/images/05-search-results.png)
+
+### 6) Confirmacion de logout
+
+![Confirmacion de logout](./docs/images/06-logout-modal.png)
+
+### 7) Vista responsive
+
+![Vista responsive](./docs/images/07-mobile-view.png)
+
+Notas utiles:
+
+- Formato recomendado: PNG.
+- Peso recomendado: menos de 500 KB por imagen.
+- Evita datos personales o emails reales en capturas.
+
+## Proximos pasos y mejoras
+
+Este roadmap resume los siguientes pasos para seguir mejorando el proyecto.
+
+- Completar Update/Delete para cerrar CRUD.
+- Mejorar cobertura de tests unitarios.
+- Agregar manejo de refresh token.
+- Agregar estados loading/empty/error mas detallados.
+
