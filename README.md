@@ -1,6 +1,6 @@
 # Oak Air App - Angular Portfolio Project
 
-Aplicacion SPA hecha con Angular Standalone para practicar y demostrar habilidades junior en:
+Aplicacion SPA hecha con Angular Standalone para practicar y demostrar habilidades en:
 
 - autenticacion con JWT
 - rutas protegidas con guard
@@ -102,7 +102,6 @@ Frontend en: http://localhost:4200
 
 ## Como probar el proyecto (paso a paso)
 
-
 ### Opcion A (recomendada): probar sin backend en modo local
 
 1. Instala dependencias:
@@ -127,6 +126,9 @@ http://localhost:4200
 - Inicia sesion en /login con ese usuario.
 - Verifica acceso a /dashboard, /flights y /search.
 - Cierra sesion y confirma redireccion a /login.
+
+💡Nota importante (modo local): la primera vez debes registrarte antes de intentar iniciar sesion.
+No hay usuarios precargados en localStorage.
 
 Que usa internamente este modo:
 
@@ -156,12 +158,6 @@ http://localhost:4200
 
 5. Valida login/register/flights contra API real.
 
-### Verificacion rapida para recruiters
-
-- La app compila: npm run build:local
-- La navegacion protegida funciona (guard redirige a /login sin sesion)
-- El token se envia en Authorization cuando hay sesion
-- Los errores 401 fuerzan logout via interceptor global
 
 ### Problemas comunes
 
@@ -270,11 +266,8 @@ La app envia header Authorization: Bearer <token> si hay sesion activa.
 ## Estado de calidad
 
 - Build local validado con exito (npm run build:local).
-- Hay tests base, pero falta ampliar cobertura para servicios, guard e interceptors.
 
 ## Capturas de pantalla
-
-Guarda las imagenes en la carpeta `docs/images` para que GitHub las renderice correctamente.
 
 ### 1) Login
 
@@ -304,11 +297,6 @@ Guarda las imagenes en la carpeta `docs/images` para que GitHub las renderice co
 
 ![Vista responsive](./docs/images/07-mobile-view.png)
 
-Notas utiles:
-
-- Formato recomendado: PNG.
-- Peso recomendado: menos de 500 KB por imagen.
-- Evita datos personales o emails reales en capturas.
 
 ## Proximos pasos y mejoras
 
