@@ -1,69 +1,74 @@
-<div class="min-h-screen bg-slate-50 p-6 md:p-12 font-sans">
+<div class="min-h-screen bg-[#f8fafb] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] p-6 md:p-12 font-sans relative overflow-hidden">
   
-  <header class="max-w-7xl mx-auto flex justify-between items-center border-b-2 border-emerald-500 pb-6 mb-12">
-    <app-brand-logo></app-brand-logo>
+  <div class="absolute top-[-10%] right-[-5%] w-96 h-96 bg-emerald-100/50 rounded-full blur-3xl pointer-events-none"></div>
 
-    <button
-      (click)="openLogoutConfirmation()"
-      class="flex items-center gap-2 bg-white border border-slate-200 hover:border-emerald-200 hover:bg-emerald-50 text-slate-500 hover:text-emerald-700 font-bold py-2.5 px-6 rounded-2xl transition-all duration-300 shadow-sm text-xs uppercase tracking-widest"
-    >
-      <span>Logout</span>
-      <span class="text-lg opacity-60">👤</span>
+  <header class="max-w-7xl mx-auto flex justify-between items-center border-b border-slate-200 pb-8 mb-16 relative z-10">
+    <app-brand-logo></app-brand-logo>
+    <button (click)="openLogoutConfirmation()" class="text-xs font-black uppercase tracking-widest text-slate-400 hover:text-emerald-600 transition-colors">
+      Logout 👤
     </button>
   </header>
 
-  <main class="max-w-7xl mx-auto">
-    <div class="mb-12 space-y-2">
-      <h3 class="text-4xl font-black text-slate-900 tracking-tight">¡Hola, {{ username() }}! ✨</h3>
-      <p class="text-slate-500 text-lg font-serif italic">Aquí tienes los detalles de tus próximas experiencias con nosotros.</p>
+  <main class="max-w-7xl mx-auto relative z-10">
+    <div class="mb-14 text-center">
+      <h3 class="text-5xl font-black text-slate-900 tracking-tight mb-2">Tus vuelos reservados</h3>
+      <p class="text-slate-500 text-lg font-serif italic">¡Hola, {{ username() }}! ✨</p>
     </div>
 
-    <div class="mb-6 flex items-center gap-4">
-      <h4 class="text-xs font-black text-emerald-700 uppercase tracking-[0.3em]">Tus Próximos Destinos</h4>
-      <div class="h-[1px] flex-1 bg-slate-200"></div>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <div class="flex flex-col gap-6 max-w-5xl mx-auto mb-32">
       @for (flight of flights(); track flight.id) {
         <app-flight-card 
           [flight]="flight" 
           (onReserve)="handleReserve($event)"> 
         </app-flight-card>
       } @empty {
-        <div class="col-span-full text-center py-24 bg-white rounded-[3rem] border border-slate-100 shadow-xl shadow-slate-200/50">
-          <div class="text-6xl mb-6 opacity-30">🌎</div>
-          <h4 class="text-2xl font-black text-slate-800 mb-2">Aún no tienes ningún viaje planeado</h4>
-          <p class="text-slate-400 font-medium italic mb-8 px-4">El mundo es demasiado grande para quedarse en un solo lugar.</p>
-          
-          <button
-            routerLink="/search"
-            class="bg-emerald-600 hover:bg-slate-900 text-white font-black py-4 px-10 rounded-full transition-all duration-300 shadow-lg shadow-emerald-100 uppercase tracking-widest text-[10px]"
-          >
-            Encontrar mi primer paraíso
-          </button>
+        <div class="text-center py-24 bg-white rounded-[3rem] border border-slate-100 shadow-xl">
+          <p class="text-slate-400 italic text-xl">Preparando sus próximos horizontes...</p>
         </div>
       }
     </div>
 
-    @if (flights().length > 0) {
-      <div class="mt-20 flex flex-col items-center gap-6">
-        <p class="text-slate-400 text-sm italic font-serif">¿Buscas algo diferente para tu próxima escapada?</p>
-        <button
-          routerLink="/search"
-          class="flex items-center gap-4 bg-white border-2 border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white font-black py-5 px-12 rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 hover:shadow-none hover:-translate-y-1 active:scale-95 group uppercase tracking-widest text-xs"
-        >
-          <span class="text-xl group-hover:rotate-12 transition-transform">✈️</span>
-          <span>Explorar nuevos horizontes</span>
-          <span class="opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all text-xl">→</span>
-        </button>
+    <section class="mt-32 mb-24 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      <div class="rounded-[3rem] overflow-hidden shadow-2xl relative min-h-[450px] group">
+        <img src="/oakAir.jfif" 
+             alt="OakAir Premium Cabin" 
+             class="w-full h-full object-cover object-center min-h-[450px] transition-transform duration-1000 group-hover:scale-105" />
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent p-10 flex flex-col justify-end">
+          <span class="text-emerald-400 font-black text-xs uppercase tracking-[0.3em] mb-3">Oak Reserve</span>
+          <h3 class="text-white text-3xl md:text-4xl font-serif font-light leading-tight">
+            Unmatched privacy <br>
+            <span class="italic text-emerald-100/80 font-normal">in the skies.</span>
+          </h3>
+        </div>
       </div>
-    }
+
+      <div class="flex flex-col gap-8">
+        <div>
+          <span class="text-emerald-700 font-black text-xs uppercase tracking-[0.4em] mb-4 block">The OakAir Heritage</span>
+          <h4 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.1] mb-6">
+            A boutique journey,<br>
+            <span class="text-emerald-600">from lounge to landing.</span>
+          </h4>
+          <p class="text-slate-600 text-lg font-serif leading-relaxed">
+            We believe aviation should be an extension of your lifestyle. Our curated routes and bespoke fleet offer more than just a destination; we provide a space for quiet reflection or focused work.
+          </p>
+        </div>
+
+        <div class="flex gap-12 border-t border-slate-100 pt-8">
+          <div class="group">
+            <span class="block text-emerald-700 font-black text-3xl mb-1 transition-transform group-hover:-translate-y-1">15min</span>
+            <span class="block text-slate-400 text-[10px] font-black uppercase tracking-widest">Check-in time</span>
+          </div>
+          <div class="group">
+            <span class="block text-emerald-700 font-black text-3xl mb-1 transition-transform group-hover:-translate-y-1">100%</span>
+            <span class="block text-slate-400 text-[10px] font-black uppercase tracking-widest">Carbon offset</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
-  <!-- Modal Logout -->
-  <app-logout-modal
-    [isOpen]="showLogoutModal()"
-    (onConfirm)="logout()"
-    (onCancel)="cancelLogout()"
-  ></app-logout-modal>
+  <app-logout-modal [isOpen]="showLogoutModal()" (onConfirm)="logout()" (onCancel)="cancelLogout()"></app-logout-modal>
 </div>
