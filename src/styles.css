@@ -1,13 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  --oakair-yellow: #ffed00;
-  --oakair-grey: #333333;
+  --oakair-ink: #162033;
+  --oakair-emerald: #0f8a5f;
+  --oakair-sand: #f6f1e8;
+  --oakair-sans: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  --oakair-serif: Georgia, "Times New Roman", Times, serif;
 }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f9f9f9;
-  color: var(--oakair-grey);
+  min-height: 100vh;
+  font-family: var(--oakair-sans);
+  color: var(--oakair-ink);
+  background:
+    radial-gradient(circle at top left, rgba(15, 138, 95, 0.09), transparent 30%),
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.9), transparent 24%),
+    linear-gradient(180deg, #fbfaf7 0%, var(--oakair-sand) 100%);
+}
+
+.oakair-display {
+  font-family: var(--oakair-serif);
+  font-style: italic;
+  letter-spacing: -0.05em;
+}
+
+.oakair-soft-border {
+  border-color: rgba(255, 255, 255, 0.72);
+}
+
+.oakair-field-shadow {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }

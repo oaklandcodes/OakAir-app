@@ -1,11 +1,11 @@
 <button
   type="submit"
   [disabled]="disabled()"
-  [class]="'mt-4 bg-emerald-600 hover:bg-slate-900 text-white font-black rounded-2xl transition-all duration-300 shadow-xl shadow-emerald-100 disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none active:scale-95 uppercase tracking-[0.2em] flex justify-center items-center gap-3 group ' + sizeClasses()"
+  [class]="'oakair-field-shadow mt-4 inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-emerald-700 via-emerald-600 to-emerald-500 font-semibold tracking-[0.25em] text-white transition-all duration-300 hover:brightness-105 hover:shadow-[0_22px_40px_rgba(15,138,95,0.24)] disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400 disabled:shadow-none active:scale-[0.99] ' + sizeClasses()"
   [class.w-full]="fullWidth()"
 >
   {{ buttonText() }}
   @if (trailingIcon()) {
-    <span class="group-hover:translate-x-1 transition-transform">{{ trailingIcon() }}</span>
+    <span class="transition-transform group-hover:translate-x-1">{{ trailingIcon() }}</span>
   }
 </button>

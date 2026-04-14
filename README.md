@@ -269,13 +269,13 @@ La app envia header Authorization: Bearer <token> si hay sesion activa.
 
 ## Capturas de pantalla
 
-### 1) Login
+### 1) Login (nuevo diseño 2026)
 
-![Login - Oak Air App](./docs/images/01-login.png)
+![Pantalla de Login - Oak Air App, rediseño 2026](./docs/images/01-login.png)
 
-### 2) Registro con validaciones
+### 2) Registro con validaciones (nuevo diseño)
 
-![Registro con validaciones](./docs/images/02-register-validation.png)
+![Pantalla de Registro con validaciones - Oak Air App, rediseño 2026](./docs/images/02-register-validation.png)
 
 ### 3) Dashboard privado
 
@@ -289,9 +289,9 @@ La app envia header Authorization: Bearer <token> si hay sesion activa.
 
 ![Busqueda de vuelos](./docs/images/05-search-results.png)
 
-### 6) Confirmacion de logout
+### 6) Confirmacion de logout (nuevo diseño)
 
-![Confirmacion de logout](./docs/images/06-logout-modal.png)
+![Modal de logout - Oak Air App, rediseño 2026](./docs/images/06-logout-modal.png)
 
 ### 7) Vista responsive
 
