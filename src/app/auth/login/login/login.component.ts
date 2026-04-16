@@ -12,10 +12,11 @@ import { merge, startWith } from 'rxjs';
 import { FormInputComponent } from '../../../components/form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../../../components/form-submit-button/form-submit-button.component';
 import { BrandLogoComponent } from '../../../components/brand-logo/brand-logo.component';
+import { NavbarComponent } from '../../../components/navbar/navbar.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent],
+  imports: [ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent, NavbarComponent],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

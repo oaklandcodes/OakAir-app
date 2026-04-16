@@ -1,6 +1,12 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, provideBrowserGlobalErrorListeners, LOCALE_ID } from '@angular/core'; // Añadido LOCALE_ID
 import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+
+// --- AÑADE ESTO PARA EL IDIOMA ESPAÑOL ---
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+registerLocaleData(localeEs);
+// -----------------------------------------
 
 import { routes } from './app.routes';
 import { authInterceptor } from '../interceptor/auth.interceptor';
@@ -18,6 +24,10 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(withFetch(), withInterceptors([authInterceptor, errorInterceptor])),
+    
+    // Añadimos este proveedor para que el CurrencyPipe sepa que estamos en España
+    { provide: LOCALE_ID, useValue: 'es' },
+
     {
       provide: AuthService,
       useClass: environment.useLocalData ? LocalAuthService : ApiAuthService,

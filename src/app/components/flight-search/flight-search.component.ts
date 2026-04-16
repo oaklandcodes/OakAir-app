@@ -9,11 +9,12 @@ import { FlightCardComponent } from '../flight-card/flight-card.component';
 import { FormInputComponent } from '../form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../form-submit-button/form-submit-button.component';
 import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, FlightCardComponent, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent],
+  imports: [ReactiveFormsModule, RouterLink, FlightCardComponent, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent, NavbarComponent],
   templateUrl: './flight-search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -37,7 +37,15 @@ export class Register {
   // Formulario reactivo con validaciones
 
   registerForm = this.fb.group({
-    username: this.fb.control('', {
+    firstName: this.fb.control('', {
+      validators: [
+        Validators.required,
+        Validators.minLength(AUTH_VALIDATION_RULES.usernameMinLength),
+        OakAirValidators.forbiddenName,
+      ],
+      nonNullable: true,
+    }),
+    lastName: this.fb.control('', {
       validators: [
         Validators.required,
         Validators.minLength(AUTH_VALIDATION_RULES.usernameMinLength),
@@ -63,17 +71,26 @@ export class Register {
     }),
   }, { validators: matchFields('password', 'confirmPassword') });
 
-  readonly usernameControl = this.registerForm.controls.username;
+  readonly firstNameControl = this.registerForm.controls.firstName;
+  readonly lastNameControl = this.registerForm.controls.lastName;
   readonly emailControl = this.registerForm.controls.email;
   readonly passwordControl = this.registerForm.controls.password;
   readonly confirmPasswordControl = this.registerForm.controls.confirmPassword;
 
   constructor() {
-    this.bindFrontendApiError(this.usernameControl, () => {
-      if (!this.usernameControl.touched) return null;
-      if (this.usernameControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.username.required;
-      if (this.usernameControl.hasError('forbiddenName')) return AUTH_VALIDATION_MESSAGES.username.forbidden;
-      if (this.usernameControl.hasError('minlength')) return AUTH_VALIDATION_MESSAGES.username.minLength;
+    this.bindFrontendApiError(this.firstNameControl, () => {
+      if (!this.firstNameControl.touched) return null;
+      if (this.firstNameControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.username.required;
+      if (this.firstNameControl.hasError('forbiddenName')) return AUTH_VALIDATION_MESSAGES.username.forbidden;
+      if (this.firstNameControl.hasError('minlength')) return AUTH_VALIDATION_MESSAGES.username.minLength;
+      return null;
+    });
+
+    this.bindFrontendApiError(this.lastNameControl, () => {
+      if (!this.lastNameControl.touched) return null;
+      if (this.lastNameControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.username.required;
+      if (this.lastNameControl.hasError('forbiddenName')) return AUTH_VALIDATION_MESSAGES.username.forbidden;
+      if (this.lastNameControl.hasError('minlength')) return AUTH_VALIDATION_MESSAGES.username.minLength;
       return null;
     });
 
@@ -135,13 +152,15 @@ export class Register {
     this.errorMessage.set(null);
 
     // llamamos al servicio de autenticación para registrar al usuario
-    const { username, email, password } = this.registerForm.getRawValue();
+    const { firstName, lastName, email, password } = this.registerForm.getRawValue();
+    const username = `${firstName} ${lastName}`.replace(/\s+/g, ' ').trim();
 
     this.authService.newUser(username, email, password).subscribe({
       next: () => {
         this.loading.set(false);
         this.registerForm.enable();
         this.router.navigate(['/login']);
+        
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
@@ -164,7 +183,7 @@ export class Register {
 
         if (err.status === 400 && err.error?.errors?.length) {
           err.error.errors.forEach(({ field, message }: BackendValidationError) => {
-            const control = this.registerForm.get(field);
+            const control = field === 'username' ? this.firstNameControl : this.registerForm.get(field);
             if (control) {
               const normalizedMessage = normalizeBackendFieldMessage(field, message);
               control.setErrors({

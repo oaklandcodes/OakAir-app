@@ -1,0 +1,52 @@
+<nav class="bg-white/90 backdrop-blur-md border-b border-slate-100 px-10 py-5 sticky top-0 z-[100]">
+  <div class="max-w-screen-2xl mx-auto flex justify-between items-center">
+    
+    <div routerLink="/dashboard" class="cursor-pointer group flex items-center gap-3">
+      <div class="w-8 h-8 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-100 group-hover:rotate-12 transition-transform">
+        O
+      </div>
+      <span class="text-2xl font-black tracking-tighter text-slate-900 italic">
+        Oak<span class="text-emerald-600">Air</span>
+      </span>
+    </div>
+
+    <div class="hidden lg:flex items-center gap-12">
+      <a routerLink="/dashboard" 
+         routerLinkActive="text-emerald-600 after:scale-x-100" 
+         class="relative text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 transition-all py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-emerald-600 after:scale-x-0 after:transition-transform">
+        Dashboard
+      </a>
+      <a routerLink="/flights" 
+         routerLinkActive="text-emerald-600 after:scale-x-100" 
+         class="relative text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 transition-all py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-emerald-600 after:scale-x-0 after:transition-transform">
+        Destinos
+      </a>
+      <a routerLink="/search" 
+         routerLinkActive="text-emerald-600 after:scale-x-100" 
+         class="relative text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 hover:text-slate-900 transition-all py-2 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[2px] after:bg-emerald-600 after:scale-x-0 after:transition-transform">
+        Buscar
+      </a>
+    </div>
+
+    <div class="flex items-center gap-8">
+      <div class="flex flex-col items-end border-r border-slate-100 pr-8">
+        <span class="text-[8px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-0.5 italic">Oak Reserve</span>
+        <span class="text-sm font-serif italic text-slate-800">{{ username() }}</span>
+      </div>
+
+      <button (click)="openLogout()" 
+              class="text-[10px] font-black uppercase tracking-[0.2em] text-red-500 hover:text-slate-900 transition-all active:scale-95">
+        Logout 👤
+      </button>
+    </div>
+
+  </div>
+</nav>
+
+@if (showLogoutModal()) {
+  <app-logout-modal
+    [isOpen]="showLogoutModal()"
+    (onConfirm)="confirmLogout()"
+    (onCancel)="cancelLogout()"
+  ></app-logout-modal>
+}

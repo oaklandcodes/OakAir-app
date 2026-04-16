@@ -11,4 +11,6 @@ import { RouterLink } from '@angular/router';
 export class BrandLogoComponent {
   readonly stacked = input(false);
   readonly showTagline = input(false);
+  readonly compact = input(false);
+  readonly linkToDashboard = input(true);
 }

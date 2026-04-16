@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { delay, Observable, of } from 'rxjs';
-import { Flight } from '../model/flight.model';
+import { Flight, FlightJournal } from '../model/flight.model';
 import { FlightService } from './flight.service';
 
 const FLIGHTS_STORAGE_KEY = 'local-flights';
@@ -27,6 +27,31 @@ export class LocalFlightService extends FlightService {
 
   getflights(): Observable<Flight[]> {
     return of(this.getFlightsFromStorage()).pipe(delay(150));
+  }
+
+  getFlights(): Observable<FlightJournal[]> {
+    // Datos simulados para historial local
+    const journal: FlightJournal[] = [
+      {
+        dest: 'Santorini, Grecia',
+        date: '12 Sep, 2024',
+        aircraft: 'Gulfstream G650ER',
+        status: 'COMPLETED',
+      },
+      {
+        dest: 'Roma, Italia',
+        date: '28 Ago, 2024',
+        aircraft: 'Bombardier Global 7500',
+        status: 'COMPLETED',
+      },
+      {
+        dest: 'Kyoto, Japón',
+        date: '05 Jul, 2024',
+        aircraft: 'Falcon 8X',
+        status: 'COMPLETED',
+      },
+    ];
+    return of(journal).pipe(delay(150));
   }
 
   private initializeFlightsIfNeeded(): void {
