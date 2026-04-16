@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { FlightService } from '../../services/flight.service';
 import { LogoutModal } from '../logout-modal/logout-modal.component';
 import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
+import { FlightJournal } from '../../model/flight.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,13 +26,20 @@ export class DashboardComponent implements OnInit {
   private flightService = inject(FlightService);
   private router = inject(Router);
 
-  // Signals
+  // Signals base
   username = this.authService.username;
-  isAuthenticated = this.authService.isAuthenticated;
   showLogoutModal = signal(false);
   flightCount = signal(0);
+  flightJournal = signal<FlightJournal[]>([]); // Signal tipado listo
 
-  // Computed
+  // Datos VIP dinámicos
+  miles = signal(84200);
+  memberStatus = signal('Oak Reserve Gold');
+
+  // Inicial del usuario para el avatar
+  userInitial = computed(() => this.username()?.charAt(0).toUpperCase() || 'U');
+
+  // Saludo dinámico según la hora
   userGreeting = computed(() => {
     const user = this.username();
     const hour = new Date().getHours();
@@ -36,11 +51,12 @@ export class DashboardComponent implements OnInit {
       greeting = 'Buenas noches';
     }
 
-    return user ? `${greeting}, ${user}! 🌍` : 'Bienvenido';
+    return user ? `${greeting}, ${user}` : 'Bienvenido';
   });
 
   ngOnInit() {
     this.loadFlightCount();
+    this.loadFlightJournal(); // <-- ¡Añadido! Cargamos el historial al iniciar
   }
 
   loadFlightCount() {
@@ -48,11 +64,16 @@ export class DashboardComponent implements OnInit {
       this.flightCount.set(flights.length);
     });
   }
+  // Nueva función para obtener el historial desde el servicio
+  loadFlightJournal() {
+    this.flightService.getFlights().subscribe((history: FlightJournal[]) => {
+      this.flightJournal.set(history);
+    });
+  }
 
   openLogoutModal() {
     this.showLogoutModal.set(true);
   }
-
   closeLogoutModal() {
     this.showLogoutModal.set(false);
   }
@@ -66,11 +87,9 @@ export class DashboardComponent implements OnInit {
   goToFlights() {
     this.router.navigate(['/flights']);
   }
-
   goToSearch() {
     this.router.navigate(['/search']);
   }
-
   goToProfile() {
     this.router.navigate(['/profile']);
   }
