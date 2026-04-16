@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { RouterLink } from '@angular/router';
@@ -15,49 +22,54 @@ import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
   templateUrl: './flights.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
 export class FlightsComponent implements OnInit {
-  // 1. Inyectamos los servicios necesarios
   private authService = inject(AuthService);
   private router = inject(Router);
   private flightService = inject(FlightService);
 
-  // 1. EL INTERRUPTOR (Signal) 💡
-  // Este Signal es como un interruptor de luz. 
-  // false = Modal apagado/escondido.
-  // true = Modal encendido/visible.
   showLogoutModal = signal(false);
 
-  // 2. Signal para almacenar los vuelos
-  flights = signal<Flight[]>([]);
+  // 1. Almacenamos TODOS los vuelos del JSON aquí
+  allFlights = signal<Flight[]>([]);
+
+  // 2. Controlamos cuántos queremos ver (empezamos por 3)
+  visibleCount = signal(3);
+
+  // 3. Este es el Signal "mágico". Solo devuelve los que queremos mostrar.
+  // Es el que usaremos en el HTML para el @for
+  flights = computed(() => this.allFlights().slice(0, this.visibleCount()));
+
   username = computed(() => this.authService.username() || 'Viajero');
 
-    ngOnInit(): void {
-    // 3. Cargamos los vuelos al inicializar el componente
+  ngOnInit(): void {
     this.flightService.getflights().subscribe((flightsList) => {
-      this.flights.set(flightsList);
+      this.allFlights.set(flightsList); // Guardamos la lista completa
     });
   }
 
-// 2. ABRIR EL MODAL 🚪
+  // 4. Función para mostrar el resto al pulsar el botón
+  showMore() {
+    this.visibleCount.set(this.allFlights().length);
+  }
+
+  showLess() {
+    this.visibleCount.set(3);
+    // Opcional: podrías añadir un window.scrollTo para devolver al usuario arriba
+  }
+
   openLogoutConfirmation() {
     this.showLogoutModal.set(true);
   }
-
-  // 3. CANCELAR (El "No" del modal) ❌
   cancelLogout() {
     this.showLogoutModal.set(false);
   }
-
   handleReserve(flight: Flight) {
     console.log('Vuelo reservado:', flight);
-    alert(`Capitán, ha seleccionado el vuelo ${flight.id}`);
   }
 
-
   logout() {
-    this.showLogoutModal.set(false); // Cerramos el modal
-    this.authService.logout();       // Limpiamos auth
-    this.router.navigate(['/login']); // ¡Buen viaje!
+    this.showLogoutModal.set(false);
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

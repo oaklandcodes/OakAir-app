@@ -160,6 +160,7 @@ export class Register {
         this.loading.set(false);
         this.registerForm.enable();
         this.router.navigate(['/login']);
+        
       },
       error: (err: HttpErrorResponse) => {
         this.loading.set(false);
