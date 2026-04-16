@@ -8,17 +8,16 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
-import { RouterLink } from '@angular/router';
 import { FlightCardComponent } from '../flight-card/flight-card.component';
 import { Flight } from '../../model/flight.model';
 import { FlightService } from '../../services/flight.service';
 import { LogoutModal } from '../logout-modal/logout-modal.component';
-import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-flights',
   standalone: true,
-  imports: [RouterLink, FlightCardComponent, LogoutModal, BrandLogoComponent], // Aquí podrías añadir CommonModule si usas directivas como *ngFor
+  imports: [FlightCardComponent, LogoutModal, NavbarComponent],
   templateUrl: './flights.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

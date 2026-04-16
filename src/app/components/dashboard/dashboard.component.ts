@@ -12,12 +12,13 @@ import { AuthService } from '../../services/auth';
 import { FlightService } from '../../services/flight.service';
 import { LogoutModal } from '../logout-modal/logout-modal.component';
 import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
+import { NavbarComponent } from '../navbar/navbar.component';
 import { FlightJournal } from '../../model/flight.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, LogoutModal, BrandLogoComponent],
+  imports: [CommonModule, LogoutModal, BrandLogoComponent, NavbarComponent],
   templateUrl: './dashboard.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
