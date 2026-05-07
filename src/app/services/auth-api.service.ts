@@ -55,7 +55,7 @@ export class ApiAuthService extends AuthService {
     this.removeStorageItem(this.TOKEN_KEY);
     this._isAuthenticated.set(false);
     this._username.set(null);
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 
   private initializeAuthFromStorage(): void {

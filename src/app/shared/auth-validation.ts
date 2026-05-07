@@ -18,7 +18,7 @@ export const AUTH_VALIDATION_MESSAGES = {
   password: {
     required: 'La clave es obligatoria',
     minLength: `Debe tener al menos ${AUTH_VALIDATION_RULES.passwordMinLength} caracteres`,
-    strength: 'Debe incluir letras y numeros',
+    strength: 'Debe incluir: mayúscula, minúscula, número y carácter especial',
   },
   generic: {
     registerError: 'Error al crear la cuenta. Intentalo de nuevo.',

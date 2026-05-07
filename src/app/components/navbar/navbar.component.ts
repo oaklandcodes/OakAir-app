@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { LogoutModal } from '../logout-modal/logout-modal.component';
+import { AuthFacadeService } from '../../facade/auth.facade';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,7 @@ import { LogoutModal } from '../logout-modal/logout-modal.component';
 export class NavbarComponent {
   // 1. Inyectamos los servicios
   private authService = inject(AuthService);
+  private authFacade = inject(AuthFacadeService);
   private router = inject(Router);
 
   // 2. Traemos el nombre del usuario desde el AuthService
@@ -35,7 +37,9 @@ export class NavbarComponent {
   // Ejecuta el cierre de sesión real
   confirmLogout() {
     this.showLogoutModal.set(false); // Cerramos el modal primero
-    this.authService.logout();       // Limpiamos los datos de sesión
-    this.router.navigate(['/login']); // ¡Nos vemos, capitán!
+    // this.authService.logout();       // Limpiamos los datos de sesión
+    // this.router.navigate(['/login']); // ¡Nos vemos, capitán!
+    this.authFacade.logout(); // Limpiamos el estado de la fachada también
+
   }
 }

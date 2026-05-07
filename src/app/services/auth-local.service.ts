@@ -1,7 +1,7 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { delay, Observable, of, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { User } from '../model/user.model';
 import { AuthService, LoginResponse } from './auth';
 
@@ -62,7 +62,7 @@ export class LocalAuthService extends AuthService {
     this.setStorageItem(this.TOKEN_KEY, response.token);
     this._isAuthenticated.set(true);
 
-    return of(response).pipe(delay(250));
+    return of(response);
   }
 
   newUser(username: string, email: string, password: string): Observable<void> {
@@ -82,7 +82,7 @@ export class LocalAuthService extends AuthService {
     const nextUsers: User[] = [...users, { username, email, password }];
     this.setStorageItem(this.USERS_KEY, JSON.stringify(nextUsers));
 
-    return of(void 0).pipe(delay(250));
+    return of(void 0);
   }
 
   logout(): void {
@@ -90,7 +90,7 @@ export class LocalAuthService extends AuthService {
     this.removeStorageItem(this.TOKEN_KEY);
     this._isAuthenticated.set(false);
     this._username.set(null);
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 
   private initializeAuthFromStorage(): void {

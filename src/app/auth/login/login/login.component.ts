@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { AuthService } from '../../../services/auth';
 import { Router, RouterLink } from '@angular/router';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { finalize } from 'rxjs';
+import { finalize, switchMap, filter, take, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AUTH_VALIDATION_MESSAGES, AUTH_VALIDATION_RULES } from '../../../shared/auth-validation';
 import { getValidationText } from '../../../components/formValidation/validation-errors';
@@ -13,10 +13,18 @@ import { FormInputComponent } from '../../../components/form-input/form-input.co
 import { FormSubmitButtonComponent } from '../../../components/form-submit-button/form-submit-button.component';
 import { BrandLogoComponent } from '../../../components/brand-logo/brand-logo.component';
 import { NavbarComponent } from '../../../components/navbar/navbar.component';
+import { AuthFacadeService } from '../../../facade/auth.facade';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent, NavbarComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    FormInputComponent,
+    FormSubmitButtonComponent,
+    BrandLogoComponent,
+    NavbarComponent,
+  ],
   templateUrl: './login.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -24,14 +32,19 @@ export class LoginComponent implements OnInit {
   // Inyectamos el servicio de autenticación y el router
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
+  private authFacade = inject(AuthFacadeService);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
 
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
     email: ['', [Validators.required, OakAirValidators.email]],
-    password: ['', [Validators.required, Validators.minLength(AUTH_VALIDATION_RULES.passwordMinLength)]],
+    password: [
+      '',
+      [Validators.required, Validators.minLength(AUTH_VALIDATION_RULES.passwordMinLength)],
+    ],
   });
 
   readonly emailControl = this.form.controls.email;
@@ -51,7 +64,10 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  private bindFrontendApiError(control: FormControl<string>, getMessage: () => string | null): void {
+  private bindFrontendApiError(
+    control: FormControl<string>,
+    getMessage: () => string | null,
+  ): void {
     merge(control.statusChanges, control.valueChanges)
       .pipe(startWith(null), takeUntilDestroyed())
       .subscribe(() => this.setFrontendApiError(control, getMessage()));
@@ -75,9 +91,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/flights']);
-    }
+    this.authFacade.isLoggedIn$.pipe(take(1)).subscribe((isLoggedIn) => {
+      if (isLoggedIn) {
+        this.router.navigate(['/flights']);
+      }
+    });
   }
 
   onSubmit(): void {
@@ -91,16 +109,24 @@ export class LoginComponent implements OnInit {
 
     const { email, password } = this.form.getRawValue();
 
-    this.authService
-      .login(email, password)
+    this.authFacade
+      .doLogin(email, password)
       .pipe(
+        switchMap(() => 
+          this.authFacade.isLoggedIn$.pipe(
+            filter(isLoggedIn => isLoggedIn),
+            take(1),
+            tap(() => {
+              this.router.navigate(['/flights']);
+            })
+          )
+        ),
         finalize(() => {
           this.loading.set(false);
           this.form.enable();
         }),
       )
       .subscribe({
-        next: () => this.router.navigate(['/flights']),
         error: (err: HttpErrorResponse) => {
           if (err.status === 401) {
             this.error.set(AUTH_VALIDATION_MESSAGES.generic.invalidCredentials);

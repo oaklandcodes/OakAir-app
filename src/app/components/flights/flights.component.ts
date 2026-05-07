@@ -69,6 +69,6 @@ export class FlightsComponent implements OnInit {
   logout() {
     this.showLogoutModal.set(false);
     this.authService.logout();
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 }

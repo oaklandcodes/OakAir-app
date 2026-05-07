@@ -10,11 +10,20 @@ import { FormInputComponent } from '../form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../form-submit-button/form-submit-button.component';
 import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
 import { NavbarComponent } from '../navbar/navbar.component';
+import e from 'express';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, FlightCardComponent, FormInputComponent, FormSubmitButtonComponent, BrandLogoComponent, NavbarComponent],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    FlightCardComponent,
+    FormInputComponent,
+    FormSubmitButtonComponent,
+    BrandLogoComponent,
+    NavbarComponent,
+  ],
   templateUrl: './flight-search.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,7 +63,10 @@ export class FlightSearchComponent implements OnInit {
     this.updateCanSearch();
   }
 
-  private bindFrontendApiError(control: FormControl<string>, getMessage: () => string | null): void {
+  private bindFrontendApiError(
+    control: FormControl<string>,
+    getMessage: () => string | null,
+  ): void {
     merge(control.statusChanges, control.valueChanges)
       .pipe(startWith(null), takeUntilDestroyed())
       .subscribe(() => this.setFrontendApiError(control, getMessage()));
@@ -78,13 +90,17 @@ export class FlightSearchComponent implements OnInit {
   }
 
   private bindSearchState(): void {
-    this.flightForm.statusChanges.pipe(startWith(this.flightForm.status), takeUntilDestroyed()).subscribe(() => {
-      this.updateCanSearch();
-    });
+    this.flightForm.statusChanges
+      .pipe(startWith(this.flightForm.status), takeUntilDestroyed())
+      .subscribe(() => {
+        this.updateCanSearch();
+      });
 
-    this.flightForm.valueChanges.pipe(startWith(this.flightForm.getRawValue()), takeUntilDestroyed()).subscribe(() => {
-      this.updateCanSearch();
-    });
+    this.flightForm.valueChanges
+      .pipe(startWith(this.flightForm.getRawValue()), takeUntilDestroyed())
+      .subscribe(() => {
+        this.updateCanSearch();
+      });
   }
 
   private updateCanSearch(): void {
@@ -114,16 +130,20 @@ export class FlightSearchComponent implements OnInit {
     this.flightService
       .getflights()
       .pipe(
+        // todo no deberia estar esto aca
         catchError((error) => {
           console.error('Error loading flights', error);
           return of([] as Flight[]);
         }),
         finalize(() => this.loading.set(false)),
       )
-      .subscribe((flights: Flight[]) => {
-        this.allFlights.set(flights);
-        this.matchingFlights.set(flights);
-        this.updateCanSearch();
+      .subscribe({
+        next: (flights: Flight[]) => {
+          this.allFlights.set(flights);
+          this.matchingFlights.set(flights);
+          this.updateCanSearch();
+        },
+       
       });
   }
 
@@ -142,14 +162,3 @@ export class FlightSearchComponent implements OnInit {
     this.matchingFlights.set(filteredFlights);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
