@@ -33,6 +33,8 @@ export class Register {
   // Signal para manejar el estado de carga
   loading = signal(false);
   errorMessage = signal<string | null>(null);
+  passwordStrengthScore = signal(0);
+  passwordStrengthLabel = signal('');
 
   // Formulario reactivo con validaciones
 
@@ -78,6 +80,10 @@ export class Register {
   readonly confirmPasswordControl = this.registerForm.controls.confirmPassword;
 
   constructor() {
+    this.passwordControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.updatePasswordStrength());
+
     this.bindFrontendApiError(this.firstNameControl, () => {
       if (!this.firstNameControl.touched) return null;
       if (this.firstNameControl.hasError('required')) return AUTH_VALIDATION_MESSAGES.username.required;
@@ -201,5 +207,16 @@ export class Register {
         this.errorMessage.set(backendMessage || AUTH_VALIDATION_MESSAGES.generic.registerError);
       },
     });
+  }
+
+  updatePasswordStrength() {
+    const password = this.passwordControl.value || '';
+    const score = OakAirValidators.getPasswordStrengthLevel(password);
+    this.passwordStrengthScore.set(score);
+    this.passwordStrengthLabel.set(OakAirValidators.getPasswordStrengthLabel(score));
+  }
+
+  getPasswordStrengthBarClass(): string {
+    return OakAirValidators.getPasswordStrengthColor(this.passwordStrengthScore());
   }
 }

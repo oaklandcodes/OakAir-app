@@ -119,6 +119,26 @@
               [control]="passwordControl"
             ></app-form-input>
 
+            @if (passwordControl.value) {
+              <div class="space-y-2">
+                <div class="flex gap-1">
+                  @for (i of [1,2,3,4,5]; track i) {
+                    <div
+                      class="h-1 flex-1 rounded-full transition-colors duration-300"
+                      [class]="i <= passwordStrengthScore() ? getPasswordStrengthBarClass() : 'bg-slate-200'"
+                    ></div>
+                  }
+                </div>
+                <p class="text-xs" [class]="{
+                  'text-rose-600': passwordStrengthScore() <= 2,
+                  'text-amber-600': passwordStrengthScore() > 2 && passwordStrengthScore() <= 4,
+                  'text-emerald-600': passwordStrengthScore() > 4
+                }">
+                  Fortaleza: {{ passwordStrengthLabel() }}
+                </p>
+              </div>
+            }
+
             <app-form-input
               [label]="'Confirmar contraseña'"
               [type]="'password'"

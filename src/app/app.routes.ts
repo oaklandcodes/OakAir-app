@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth-guard';
+import { AuthenticatedLayoutComponent } from './layouts/authenticated-layout.component';
 
 export const routes: Routes = [
   {
@@ -11,21 +12,40 @@ export const routes: Routes = [
     loadComponent: () => import('./auth/register/register').then((m) => m.Register),
   },
   {
-    path: 'dashboard',
-    loadComponent: () => import('./components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+    path: '',
+    component: AuthenticatedLayoutComponent,
     canActivate: [authGuard],
+    children: [
+      {
+        path: 'dashboard',
+        loadComponent: () =>
+          import('./components/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'flights',
+        loadComponent: () =>
+          import('./components/flights/flights.component').then((m) => m.FlightsComponent),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'search',
+        loadComponent: () =>
+          import('./components/flight-search/flight-search.component').then(
+            (m) => m.FlightSearchComponent,
+          ),
+        canActivate: [authGuard],
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('./components/profile/profile.component').then(
+            (m) => m.ProfileComponent,
+          ),
+        canActivate: [authGuard],
+      },
+    ],
   },
-  {
-    path: 'flights',
-    loadComponent: () => import('./components/flights/flights.component').then((m) => m.FlightsComponent),
-    canActivate: [authGuard],
-  },
-  {
-    path: 'search',
-    loadComponent: () => import('./components/flight-search/flight-search.component').then((m) => m.FlightSearchComponent),
-    canActivate: [authGuard],
-  },
-
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: 'dashboard' },
 ];

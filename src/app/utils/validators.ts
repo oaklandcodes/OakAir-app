@@ -37,21 +37,52 @@ export class OakAirValidators {
 
   /**
    * Validador de Fortaleza de Contraseña (ValidatorFn)
-   * Usa un Regex simple: requiere al menos una letra y un número
+   * Requiere: letra minúscula + letra mayúscula + número + carácter especial
    */
   static passwordStrength(): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = String(control.value ?? '');
       if (!value) return null;
 
-      // Regex: [0-9] busca números, [a-zA-Z] busca letras
+      const hasLowercase = /[a-z]/.test(value);
+      const hasUppercase = /[A-Z]/.test(value);
       const hasNumber = /[0-9]/.test(value);
-      const hasLetter = /[a-zA-Z]/.test(value);
+      const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(value);
 
-      const isPasswordValid = hasNumber && hasLetter;
+      const errors: string[] = [];
+      if (!hasLowercase) errors.push('minúscula');
+      if (!hasUppercase) errors.push('mayúscula');
+      if (!hasNumber) errors.push('número');
+      if (!hasSpecial) errors.push('carácter especial');
 
-      // Si NO es válida, devolvemos el error 'passwordStrength'
-      return !isPasswordValid ? { passwordStrength: true } : null;
+      if (errors.length > 0) {
+        return { passwordStrength: { missing: errors } };
+      }
+
+      return null;
     };
+  }
+
+  static getPasswordStrengthLevel(password: string): number {
+    if (!password) return 0;
+    let score = 0;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score++;
+    if (password.length >= 8) score++;
+    return score;
+  }
+
+  static getPasswordStrengthLabel(score: number): string {
+    if (score <= 2) return 'Débil';
+    if (score <= 4) return 'Media';
+    return 'Fuerte';
+  }
+
+  static getPasswordStrengthColor(score: number): string {
+    if (score <= 2) return 'bg-rose-500';
+    if (score <= 4) return 'bg-amber-500';
+    return 'bg-emerald-500';
   }
 }
