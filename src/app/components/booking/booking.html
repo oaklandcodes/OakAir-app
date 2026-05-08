@@ -1,0 +1,155 @@
+<div class="min-h-screen bg-slate-50 font-sans">
+  @if (isLoading()) {
+    <div class="flex items-center justify-center min-h-screen">
+      <div class="w-12 h-12 border-4 border-emerald-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  } @else if (flight()) {
+    <div class="max-w-6xl mx-auto pb-20">
+      <div class="bg-white shadow-sm">
+        <div class="relative h-72 md:h-96 overflow-hidden rounded-b-[2.5rem]">
+          <img
+            [src]="getDestinationImage(flight()!.destination)"
+            [alt]="getCityName(flight()!.destination)"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+
+          <button
+            (click)="goBack()"
+            class="absolute top-6 left-6 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300 cursor-pointer"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path fill-rule="evenodd" d="M9.53 16.122a3 3 0 00-5.66 1.838 12 12 0 002.186 5.304 12 12 0 005.304 2.186 3 3 0 001.838-5.66V19.5l3-1.5 3 1.5v-6.5a3 3 0 00-1.838-5.66 12 12 0 00-2.186-5.304 12 12 0 00-5.304-2.186z" clip-rule="evenodd" />
+            </svg>
+          </button>
+
+          <div class="absolute bottom-8 left-8 md:left-12 right-8 md:right-12">
+            <span class="text-emerald-400 font-black text-[9px] uppercase tracking-[0.4em] block mb-2">Tu Próximo Vuelo</span>
+            <h1 class="text-white text-4xl md:text-6xl font-serif font-light leading-tight">
+              {{ getCityName(flight()!.destination) }}
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 md:px-10 mt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 space-y-8">
+            <div class="bg-white rounded-[2.5rem] p-8 md:p-10 shadow-sm border border-slate-100">
+              <h2 class="text-xl font-black text-slate-900 mb-6 uppercase tracking-widest">Detalles del Vuelo</h2>
+              <div class="flex flex-col md:flex-row items-center gap-6 md:gap-10">
+                <div class="flex flex-col items-center flex-1">
+                  <span class="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em] mb-2">Origen</span>
+                  <h3 class="text-4xl font-black text-slate-900 tracking-tighter">{{ flight()!.origin }}</h3>
+                  <p class="text-emerald-600 font-bold text-sm mt-2 italic">{{ getCityName(flight()!.origin) }}</p>
+                </div>
+
+                <div class="flex flex-col items-center flex-shrink-0">
+                  <div class="w-16 h-16 rounded-full bg-emerald-50 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-emerald-600 rotate-90">
+                      <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+                    </svg>
+                  </div>
+                  <span class="text-[9px] text-slate-400 font-bold mt-2 uppercase tracking-widest">Directo · 2H 15M</span>
+                </div>
+
+                <div class="flex flex-col items-center flex-1">
+                  <span class="text-[9px] text-slate-400 font-black uppercase tracking-[0.3em] mb-2">Destino</span>
+                  <h3 class="text-4xl font-black text-slate-900 tracking-tighter">{{ flight()!.destination }}</h3>
+                  <p class="text-emerald-600 font-bold text-sm mt-2 italic">{{ getCityName(flight()!.destination) }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-slate-900 to-slate-950 rounded-[2.5rem] p-8 md:p-10 shadow-xl relative overflow-hidden border border-white/5">
+              <div class="absolute top-0 right-0 w-64 h-64 bg-white/[0.02] rounded-full blur-3xl"></div>
+              <h2 class="text-lg font-black text-white/90 uppercase tracking-[0.3em] mb-8 relative">Tu Experiencia a Bordo</h2>
+
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+                <div class="text-center group">
+                  <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-emerald-900/40 border border-emerald-700/30 flex items-center justify-center group-hover:bg-emerald-800/50 transition-all duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-7 h-7 text-emerald-400">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456ZM8.25 6.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0Zm12 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0Z" />
+                    </svg>
+                  </div>
+                  <p class="text-white font-bold text-sm mb-1">Champagne Dom Pérignon</p>
+                  <p class="text-white/40 text-xs leading-relaxed">Servicio de cava y cócteles premium en cada vuelo</p>
+                </div>
+
+                <div class="text-center group">
+                  <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-emerald-900/40 border border-emerald-700/30 flex items-center justify-center group-hover:bg-emerald-800/50 transition-all duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-7 h-7 text-emerald-400">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M20 21v-2a4.8 4.8 0 00-1.053-3.042 5.54 5.54 0 00-3.11-1.78A5.54 5.54 0 0012 5.4a5.54 5.54 0 00-3.836 1.78 4.8 4.8 0 00-1.053 3.042L3 21v2h18v-2M7.5 6a3 3 0 106 0 3 3 0 00-6 0Zm9 9a2.5 2.5 0 110-5 2.5 2.5 0 010 5Z" />
+                    </svg>
+                  </div>
+                  <p class="text-white font-bold text-sm mb-1">Asiento Lie-Flat</p>
+                  <p class="text-white/40 text-xs leading-relaxed">Configuración cama para máximo confort</p>
+                </div>
+
+                <div class="text-center group">
+                  <div class="w-16 h-16 mx-auto mb-5 rounded-full bg-emerald-900/40 border border-emerald-700/30 flex items-center justify-center group-hover:bg-emerald-800/50 transition-all duration-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-7 h-7 text-emerald-400">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                    </svg>
+                  </div>
+                  <p class="text-white font-bold text-sm mb-1">Menú Gourmand</p>
+                  <p class="text-white/40 text-xs leading-relaxed">Chef a bordo con cocina de autor</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <div class="bg-gradient-to-br from-emerald-800 to-emerald-950 rounded-[2.5rem] p-8 shadow-xl relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-48 h-48 bg-emerald-600/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+              <div class="relative">
+                <span class="text-emerald-400/60 text-[9px] font-black uppercase tracking-[0.3em] block mb-1">Precio Final</span>
+                <div class="text-5xl font-black text-white tracking-tighter mb-6">
+                  {{ flight()!.price | currency:'EUR':'symbol':'1.0-0' }}
+                </div>
+
+                <div class="space-y-4 mb-8">
+                  <div class="flex justify-between items-center">
+                    <span class="text-emerald-400/60 text-xs font-bold uppercase tracking-widest">Vuelo</span>
+                    <span class="text-white text-sm font-bold">#{{ flight()!.id }}</span>
+                  </div>
+                  <div class="flex flex-col items-end">
+                    <span class="text-emerald-400/60 text-[9px] font-bold uppercase tracking-widest mb-1">Fecha</span>
+                    <span class="text-white text-sm font-bold">{{ getFormattedDate(flight()!.date) }}</span>
+                    <span class="text-white/60 text-xs">Hora: {{ getFormattedTime(flight()!.date) }}</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-emerald-400/60 text-xs font-bold uppercase tracking-widest">Clase</span>
+                    <span class="text-white text-sm font-bold">Business</span>
+                  </div>
+                  <div class="flex justify-between items-center">
+                    <span class="text-emerald-400/60 text-xs font-bold uppercase tracking-widest">Duración</span>
+                    <span class="text-white text-sm font-bold">2H 15M</span>
+                  </div>
+                </div>
+
+                <button
+                  (click)="confirmBooking()"
+                  class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-900 font-black py-4 px-8 rounded-xl uppercase tracking-[0.2em] text-[11px] transition-all duration-300 shadow-lg active:scale-95">
+                  Confirmar Reserva
+                </button>
+
+                <p class="text-emerald-400/40 text-[9px] text-center mt-4 uppercase tracking-widest">
+                  Confirmación instantánea · Cancelación gratuita 24h
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center min-h-screen">
+      <p class="text-slate-400 text-lg italic mb-6">No hemos encontrado este vuelo.</p>
+      <button (click)="goBack()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-black py-3 px-8 rounded-xl uppercase tracking-widest text-sm transition-all">
+        Volver a Vuelos
+      </button>
+    </div>
+  }
+</div>

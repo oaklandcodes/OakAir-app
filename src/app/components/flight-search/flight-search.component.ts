@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@ang
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, finalize, merge, of, startWith } from 'rxjs';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FlightService } from '../../services/flight.service';
 import { Flight } from '../../model/flight.model';
 import { FlightCardComponent } from '../flight-card/flight-card.component';
@@ -29,6 +29,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 export class FlightSearchComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly flightService = inject(FlightService);
+  private readonly router = inject(Router);
 
   private readonly allFlights = signal<Flight[]>([]);
 
@@ -143,6 +144,10 @@ export class FlightSearchComponent implements OnInit {
         },
        
       });
+  }
+
+  handleReserve(flight: Flight) {
+    this.router.navigate(['/booking', flight.id]);
   }
 
   private filterFlights(originQuery: string, destinationQuery: string): void {

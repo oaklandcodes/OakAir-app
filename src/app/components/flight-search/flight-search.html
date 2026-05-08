@@ -57,7 +57,7 @@
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         @for (flight of matchingFlights(); track flight.id) {
-          <app-flight-card [flight]="flight"></app-flight-card>
+          <app-flight-card [flight]="flight" (onReserve)="handleReserve($event)"></app-flight-card>
         } @empty {
           @if (hasSearched()) {
             <div class="col-span-full text-center py-10 space-y-5">

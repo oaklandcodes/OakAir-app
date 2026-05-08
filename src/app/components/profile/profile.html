@@ -3,9 +3,11 @@
     <div class="flex items-center gap-4 mb-10">
       <button
         (click)="goBack()"
-        class="w-12 h-12 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center text-lg hover:bg-slate-900 hover:text-white transition-all duration-300 cursor-pointer"
+        class="w-12 h-12 rounded-full bg-white border border-slate-100 shadow-sm flex items-center justify-center text-lg hover:bg-emerald-600 hover:border-emerald-600 hover:text-white transition-all duration-300 cursor-pointer"
       >
-        ←
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+          <path fill-rule="evenodd" d="M10.78 19.03a7.741 7.741 0 001.22.38 8.755 8.755 0 001.97-1.22 9.75 9.75 0 01-1.12 2.17 9.753 9.753 0 01-2.17-1.12 7.741 7.741 0 00-.38-1.22 8.755 8.755 0 00-1.22-1.97 9.75 9.75 0 011.22-2.17 9.753 9.753 0 012.17 1.12 8.755 8.755 0 001.22 1.97 9.75 9.75 0 001.22 2.17zm-8.03-7.78a9.75 9.75 0 012.17-1.12 7.741 7.741 0 00-.38-1.22 8.755 8.755 0 00-1.22-1.97 9.75 9.75 0 011.22-2.17 9.753 9.753 0 011.12 2.17 7.741 7.741 0 00-.38 1.22 8.755 8.755 0 001.22 1.97 9.75 9.75 0 01-2.17 1.12 9.753 9.753 0 01-1.12-2.17 7.741 7.741 0 00-1.22-1.97 8.755 8.755 0 00-1.22-1.22 9.75 9.75 0 012.17-1.12 9.753 9.753 0 011.12 2.17z" clip-rule="evenodd" />
+        </svg>
       </button>
       <div>
         <span class="text-emerald-700 font-black text-[9px] uppercase tracking-[0.4em] block italic">Member Portal</span>
@@ -14,56 +16,52 @@
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
-      <div class="bg-white rounded-[3rem] p-12 border border-slate-100 shadow-sm relative overflow-hidden">
+      <div class="bg-white rounded-[3rem] p-10 md:p-12 border border-slate-100 shadow-sm relative overflow-hidden">
         @if (userInitial()) {
-          <div class="w-28 h-28 rounded-full bg-emerald-600 text-white flex items-center justify-center text-5xl font-black mx-auto mb-8">
+          <div class="w-24 h-24 rounded-full bg-emerald-600 text-white flex items-center justify-center text-4xl font-black mx-auto mb-6">
             {{ userInitial() }}
           </div>
         } @else {
-          <div class="w-28 h-28 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-5xl font-black mx-auto mb-8">
+          <div class="w-24 h-24 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center text-4xl font-black mx-auto mb-6">
             ?
           </div>
         }
-        <h2 class="text-3xl font-black text-slate-900 text-center mb-2">{{ userGreeting() }}</h2>
-        <p class="text-slate-400 text-center text-sm">{{ memberStatus() }}</p>
+        <h2 class="text-2xl font-black text-slate-900 text-center mb-1">{{ userGreeting() }}</h2>
+        <p class="text-emerald-700 text-center text-sm font-medium">{{ memberStatus() }}</p>
 
-        <div class="mt-10 pt-8 border-t border-slate-100 space-y-6">
+        <div class="mt-8 pt-8 border-t border-slate-100 space-y-6">
           <div>
             <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Oak Miles</p>
             <p class="text-slate-900 font-black text-2xl tracking-tighter">{{ miles() | number }}</p>
-          </div>
-          <div>
-            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Member Status</p>
-            <p class="text-emerald-700 font-black text-sm">{{ memberStatus() }}</p>
           </div>
         </div>
       </div>
 
       <div class="lg:col-span-2 space-y-8">
-        <div class="bg-white rounded-[3rem] p-12 border border-slate-100 shadow-sm">
+        <div class="bg-white rounded-[3rem] p-10 md:p-12 border border-slate-100 shadow-sm">
           <h3 class="text-xl font-black text-slate-900 mb-8">Información de la Cuenta</h3>
-          <div class="space-y-6">
-            <div class="flex justify-between items-center p-6 bg-slate-50 rounded-3xl">
+          <div class="space-y-5">
+            <div class="flex justify-between items-center p-5 hover:bg-slate-50 rounded-2xl transition-all duration-300">
               <div>
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Viajero</p>
                 <p class="text-slate-900 font-bold text-lg">{{ username() || '—' }}</p>
               </div>
-              <span class="bg-emerald-50 text-emerald-700 text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest border border-emerald-100">Activo</span>
+              <span class="bg-emerald-50 text-emerald-700 text-[9px] font-bold px-4 py-2 rounded-full uppercase tracking-widest border border-emerald-100">Activo</span>
             </div>
           </div>
         </div>
 
-        <div class="bg-white rounded-[3rem] p-12 border border-slate-100 shadow-sm">
+        <div class="bg-white rounded-[3rem] p-10 md:p-12 border border-slate-100 shadow-sm">
           <h3 class="text-xl font-black text-slate-900 mb-8">Preferencias</h3>
-          <div class="space-y-6">
-            <div class="flex justify-between items-center p-6 bg-slate-50 rounded-3xl">
+          <div class="space-y-5">
+            <div class="flex justify-between items-center p-5 hover:bg-slate-50 rounded-2xl transition-all duration-300">
               <div>
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Notificaciones</p>
                 <p class="text-slate-700 text-sm">Email y push activas</p>
               </div>
               <span class="text-emerald-600 text-sm font-bold">Activado</span>
             </div>
-            <div class="flex justify-between items-center p-6 bg-slate-50 rounded-3xl">
+            <div class="flex justify-between items-center p-5 hover:bg-slate-50 rounded-2xl transition-all duration-300">
               <div>
                 <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Idioma</p>
                 <p class="text-slate-700 text-sm">Español</p>
@@ -73,9 +71,9 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-[3rem] p-12 border border-slate-100 shadow-sm">
+        <div class="bg-white rounded-[3rem] p-10 md:p-12 border border-slate-100 shadow-sm">
           <h3 class="text-xl font-black text-slate-900 mb-8">Zona de Peligro</h3>
-          <div class="flex items-center justify-between p-6 bg-red-50 rounded-3xl border border-red-100">
+          <div class="flex items-center justify-between p-6 bg-red-50 rounded-2xl border border-red-100">
             <div>
               <p class="text-[10px] font-black text-red-400 uppercase tracking-widest mb-1">Eliminar Cuenta</p>
               <p class="text-red-700 text-sm">Esta acción no se puede deshacer</p>

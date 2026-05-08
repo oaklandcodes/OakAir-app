@@ -63,7 +63,7 @@ export class FlightsComponent implements OnInit {
     this.showLogoutModal.set(false);
   }
   handleReserve(flight: Flight) {
-    console.log('Vuelo reservado:', flight);
+    this.router.navigate(['/booking', flight.id]);
   }
 
   logout() {
