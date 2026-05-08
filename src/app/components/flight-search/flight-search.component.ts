@@ -10,7 +10,6 @@ import { FormInputComponent } from '../form-input/form-input.component';
 import { FormSubmitButtonComponent } from '../form-submit-button/form-submit-button.component';
 import { BrandLogoComponent } from '../brand-logo/brand-logo.component';
 import { NavbarComponent } from '../navbar/navbar.component';
-import e from 'express';
 
 @Component({
   selector: 'app-flight-search',
@@ -130,7 +129,6 @@ export class FlightSearchComponent implements OnInit {
     this.flightService
       .getflights()
       .pipe(
-        // todo no deberia estar esto aca
         catchError((error) => {
           console.error('Error loading flights', error);
           return of([] as Flight[]);
